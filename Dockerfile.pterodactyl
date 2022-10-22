@@ -1,0 +1,15 @@
+FROM ad3m3r5/tiltedevolution-server:latest
+
+RUN apk add --no-cache ca-certificates tzdata openssl && \
+  adduser --disabled-password --home /home/container container && \
+  chown -R container:container /home/server
+
+USER container
+ENV USER=container HOME=/home/container
+
+WORKDIR /home/container
+
+COPY ./entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT []
+CMD ["/bin/ash", "/entrypoint.sh"]

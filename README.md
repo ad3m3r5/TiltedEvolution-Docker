@@ -45,3 +45,6 @@ This is for running a managed and containerized game server using [Pterodactyl](
   * Using the `STServer.ini`:
     * Can ONLY be done while the server is shutdown
     * If done while running, the config will be overwritten with the running config
+
+* Updating the Server
+  * Pterodactyl should automatically pull the latest image when starting the server

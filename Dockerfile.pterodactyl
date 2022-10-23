@@ -1,4 +1,5 @@
-FROM ad3m3r5/tiltedevolution-server:latest
+ARG VERSION=latest
+FROM ad3m3r5/tiltedevolution-server:$VERSION
 
 RUN apk add --no-cache ca-certificates tzdata openssl && \
   adduser --disabled-password --home /home/container container && \

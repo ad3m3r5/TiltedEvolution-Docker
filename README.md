@@ -1,4 +1,13 @@
 # TiltedEvolution-Docker
+
+[![Docker Hub](https://img.shields.io/badge/DockerHub-builder-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-builder)
+[![Docker Hub](https://img.shields.io/badge/DockerHub-server-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-server)
+[![Docker Hub](https://img.shields.io/badge/DockerHub-pterodactyl-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-pterodactyl)
+
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-builder/latest?logo=docker&style=plastic)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-server/latest?logo=docker&style=plastic)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-pterodactyl/latest?logo=docker&style=plastic)
+
 This repository contains custom Docker images for the Tilted Evolution / Skyrim Together Reborn project using a base of Alpine Linux. There is also a Docker image and Pterodactyl egg for easily running the game server using [Pterodactyl](https://pterodactyl.io/).
 
 I am not affiliated with the Tilted Evolution development team, project, or any other related teams or pojects.
@@ -6,7 +15,11 @@ I am not affiliated with the Tilted Evolution development team, project, or any 
 ## Building
   * `docker build -t tiltedevolution-builder:latest -f Dockerfile.builder .`
   * `docker build -t tiltedevolution-server:latest -f Dockerfile .`
+    * Dockerfile will default to the `master` branch. Specific tag versions can be used instead.
+    * example: `docker build -t tiltedevolution-server:1.3.2 --build-arg BRANCH=v1.3.2 -f Dockerfile .`
   * `docker build -t tiltedevolution-pterodactyl:latest -f Dockerfile.pterodactyl .`
+    * Dockerfile will default to `latest` tag of the `tiltedevolution-server` base image. Specific tag versions can be used instead.
+    * example: `docker build -t tiltedevolution-pterodactyl:1.3.2 --build-arg VERSION=1.3.2 -f Dockerfile.pterodactyl .`
 
 
 ## Running

@@ -1,16 +1,12 @@
 # TiltedEvolution-Docker
+This repository contains custom Docker images for the [Tilted Evolution](https://github.com/tiltedphoques/TiltedEvolution) / [Skyrim Together Reborn](https://skyrim-together.com/) project using a base of Alpine Linux. There is also a Docker image and Pterodactyl egg for easily running the game server using [Pterodactyl](https://pterodactyl.io/).
 
-[![Docker Hub](https://img.shields.io/badge/DockerHub-builder-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-builder)
-[![Docker Hub](https://img.shields.io/badge/DockerHub-server-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-server)
-[![Docker Hub](https://img.shields.io/badge/DockerHub-pterodactyl-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-pterodactyl)
+I am not affiliated with the Tilted Evolution or Pterodactyl development teams, projects, or any other related teams or pojects.
 
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-builder/latest?logo=docker&style=plastic)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-server/latest?logo=docker&style=plastic)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-pterodactyl/latest?logo=docker&style=plastic)
-
-This repository contains custom Docker images for the Tilted Evolution / Skyrim Together Reborn project using a base of Alpine Linux. There is also a Docker image and Pterodactyl egg for easily running the game server using [Pterodactyl](https://pterodactyl.io/).
-
-I am not affiliated with the Tilted Evolution development team, project, or any other related teams or pojects.
+## Images
+* [![Docker Hub](https://img.shields.io/badge/DockerHub-builder-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-builder) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-builder/latest?logo=docker&style=plastic)
+* [![Docker Hub](https://img.shields.io/badge/DockerHub-server-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-server) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-server/latest?logo=docker&style=plastic)
+* [![Docker Hub](https://img.shields.io/badge/DockerHub-pterodactyl-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-pterodactyl) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-pterodactyl/latest?logo=docker&style=plastic)
 
 ## Building
   * `docker build -t tiltedevolution-builder:latest -f Dockerfile.builder .`
@@ -23,11 +19,21 @@ I am not affiliated with the Tilted Evolution development team, project, or any 
 
 
 ## Running
-The original [wiki](https://wiki.tiltedphoques.com/tilted-online/guides/server-guide/linux-setup/docker-setup) information should still be used.
+The original [wiki](https://wiki.tiltedphoques.com/tilted-online/guides/server-guide/linux-setup/docker-setup) information should still be used, but with the new image.
 
+Example:
+```
+mkdir -p /opt/docker/skyrimserver/{config,logs,Data}
+
+docker run -d -it --name skyrimserver -p 10578:10578/udp \
+  -v /opt/docker/skyrimserver/config:/home/server/config \
+  -v /opt/docker/skyrimserver/Data:/home/server/Data \
+  -v /opt/docker/skyrimserver/logs:/home/server/logs \
+  ad3m3r5/tiltedevolution-server:latest
+```
 
 ## Pterodactyl
-This is for running a managed and containerized game server using [Pterodactyl](https://pterodactyl.io/). I am not affiliated with the Pterodactyl.io team in any way.
+This is for running a managed and containerized game server using [Pterodactyl](https://pterodactyl.io/).
 
 ### Steps:
 * Download the `egg-tilted-evolution.json` egg definition
@@ -60,4 +66,4 @@ This is for running a managed and containerized game server using [Pterodactyl](
     * If done while running, the config will be overwritten with the running config
 
 * Updating the Server
-  * Pterodactyl should automatically pull the latest image when starting the server
+  * Pterodactyl should automatically pull the latest image when (re)starting the server

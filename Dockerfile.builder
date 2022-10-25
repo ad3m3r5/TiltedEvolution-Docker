@@ -17,21 +17,7 @@ RUN apk add --no-cache \
   p7zip \
   perl \
   xz \
-  bsd-compat-headers \
-  # packages used in the build process - cuts down on build prep time
-  snappy-dev \
-  openssl-dev \
-  spdlog-dev \
-  m4 \
-  autoconf \
-  automake \
-  glm glm-dev \
-  libtool \
-  gtest gtest-dev \
-  zlib-dev \
-  libuv-dev \
-  curl-dev
-  
+  bsd-compat-headers  
 
 RUN git clone --recursive https://github.com/xmake-io/xmake.git ./xmake && \
   cd xmake && \

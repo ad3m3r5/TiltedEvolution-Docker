@@ -1,5 +1,4 @@
-#FROM ad3m3r5/tiltedevolution-builder:latest as builder
-FROM te-builder:latest as builder
+FROM ad3m3r5/tiltedevolution-builder:latest as builder
 
 ARG REPO=https://github.com/tiltedphoques/TiltedEvolution.git
 ARG BRANCH=master

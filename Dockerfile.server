@@ -1,4 +1,5 @@
-FROM ad3m3r5/tiltedevolution-builder:latest as builder
+#FROM ad3m3r5/tiltedevolution-builder:latest as builder
+FROM te-builder:latest as builder
 
 ARG REPO=https://github.com/tiltedphoques/TiltedEvolution.git
 ARG BRANCH=master
@@ -7,12 +8,13 @@ WORKDIR /home/builder
 
 ENV XMAKE_ROOT=y
 
-RUN git clone --recursive -b ${BRANCH} ${REPO} ./str
-## resolve issues with std::string
-RUN if grep -Fxqv "#include <string>" /home/builder/str/Libraries/TiltedConnect/Code/connect/include/Client.hpp ; then sed -i -e '3i#include <string>\' /home/builder/str/Libraries/TiltedConnect/Code/connect/include/Client.hpp ; fi
-RUN cd str && xmake config -m release -y && xmake -y && xmake install -o package -y
+RUN source ~/.xmake/profile && git clone --recursive -b ${BRANCH} ${REPO} ./str && \
+    cd str && \
+    xmake config -m release -y && \
+    xmake -y && \
+    xmake install -o package -y
 
-FROM alpine:3.16
+FROM alpine:3.18
 
 COPY --from=builder /home/builder/str/package/lib/libSTServer.so /home/server/libSTServer.so
 COPY --from=builder /home/builder/str/package/bin/crashpad_handler /home/server/crashpad_handler

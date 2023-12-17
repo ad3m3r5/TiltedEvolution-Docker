@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.18
 
 WORKDIR /home/builder
 
@@ -19,8 +19,4 @@ RUN apk add --no-cache \
   xz \
   bsd-compat-headers  
 
-RUN git clone --recursive https://github.com/xmake-io/xmake.git ./xmake && \
-  cd xmake && \
-  make build && \
-  make install && \
-  rm -rf /home/builder/xmake
+RUN curl -fsSL https://xmake.io/shget.text | bash

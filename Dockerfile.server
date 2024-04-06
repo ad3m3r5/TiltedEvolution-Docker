@@ -13,7 +13,7 @@ RUN source ~/.xmake/profile && git clone --recursive -b ${BRANCH} ${REPO} ./str 
     xmake -y && \
     xmake install -o package -y
 
-FROM alpine:3.18
+FROM alpine:3.19
 
 COPY --from=builder /home/builder/str/package/lib/libSTServer.so /home/server/libSTServer.so
 COPY --from=builder /home/builder/str/package/bin/crashpad_handler /home/server/crashpad_handler

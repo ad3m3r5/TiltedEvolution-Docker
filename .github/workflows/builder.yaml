@@ -1,10 +1,6 @@
-
 name: [builder] Build and Push
-
 # run every two hours to check for updates
 on:
-#  schedule:
-#  - cron: "0 */2 * * *"
   workflow_dispatch:
 
 jobs:

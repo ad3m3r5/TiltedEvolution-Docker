@@ -1,6 +1,4 @@
-
 name: [server, pterodactyl] Auto Build and Push
-
 # run every two hours to check for updates
 on:
 #  schedule:

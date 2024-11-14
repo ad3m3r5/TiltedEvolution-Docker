@@ -3,6 +3,9 @@ name: "[builder] Build and Push"
 on:
   workflow_dispatch:
 
+env:
+  IMAGE_VERSION: "1.2.0"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -38,7 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           #platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:1.2.0
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:${{ env.IMAGE_VERSION }}
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:1.2.0
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:${{ env.IMAGE_VERSION }}
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:latest

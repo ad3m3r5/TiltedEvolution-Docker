@@ -13,7 +13,7 @@
       "ad3m3r5\/tiltedevolution-pterodactyl:latest": "ad3m3r5\/tiltedevolution-pterodactyl:latest"
   },
   "file_denylist": [],
-  "startup": "\/home\/server\/SkyrimTogetherServer",
+  "startup": "\/home\/container\/SkyrimTogetherServer",
   "config": {
       "files": "{}",
       "startup": "{\r\n    \"done\": \"Server started\"\r\n}",
@@ -23,7 +23,7 @@
   "scripts": {
       "installation": {
           "script": null,
-          "container": "alpine:3.16",
+          "container": "alpine:3.18",
           "entrypoint": "ash"
       }
   },

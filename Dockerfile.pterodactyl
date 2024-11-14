@@ -1,16 +1,29 @@
 ARG VERSION=latest
-FROM ad3m3r5/tiltedevolution-server:$VERSION
 
-RUN apk add --no-cache ca-certificates tzdata openssl && \
-  adduser --disabled-password --home /home/container container && \
-  chown -R container:container /home/server
+FROM ad3m3r5/tiltedevolution-server:$VERSION AS server
 
-USER container
-ENV USER=container HOME=/home/container
+FROM alpine:3.18
 
-WORKDIR /home/container
+ARG USER=container
+
+RUN apk upgrade --no-cache \
+    && apk add --no-cache \
+      ca-certificates \
+      tzdata \
+      openssl \
+    && adduser --disabled-password --home /home/$USER $USER
+
+USER $USER
+WORKDIR /home/$USER
+ENV USER=$USER HOME=/home/$USER
+
+COPY --from=builder /home/tilted/libSTServer.so /home/$USER/libSTServer.so
+COPY --from=builder /home/tilted/crashpad_handler /home/$USER/crashpad_handler
+COPY --from=builder /home/tilted/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
+COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
+COPY --from=builder /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 
 COPY ./entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT []
-CMD ["/bin/ash", "/entrypoint.sh"]
+CMD ["/bin/bash", "/entrypoint.sh"]

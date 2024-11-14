@@ -1,28 +1,40 @@
-FROM ad3m3r5/tiltedevolution-builder:latest as builder
+# Build Container
+#FROM ad3m3r5/tiltedevolution-builder:latest AS builder
+FROM builder:local AS builder
 
 ARG REPO=https://github.com/tiltedphoques/TiltedEvolution.git
-ARG BRANCH=master
+#ARG BRANCH=master
+ARG BRANCH=v1.6.8
 
-WORKDIR /home/builder
+SHELL ["/bin/bash", "-c"]
 
-ENV XMAKE_ROOT=y
+RUN source ~/.xmake/profile \
+    && git clone --recursive -b $BRANCH $REPO ./str \
+    && cd str \
+    && xmake config -m release -y \
+    && xmake -y \
+    && xmake install -o package -y
 
-RUN source ~/.xmake/profile && git clone --recursive -b ${BRANCH} ${REPO} ./str && \
-    cd str && \
-    xmake config -m release -y && \
-    xmake -y && \
-    xmake install -o package -y
 
+
+# Server Container
 FROM alpine:3.18
 
-COPY --from=builder /home/builder/str/package/lib/libSTServer.so /home/server/libSTServer.so
-COPY --from=builder /home/builder/str/package/bin/crashpad_handler /home/server/crashpad_handler
-COPY --from=builder /home/builder/str/package/bin/SkyrimTogetherServer /home/server/SkyrimTogetherServer
+ARG USER=tilted
 
+RUN apk upgrade --no-cache \
+    && addgroup -S $USER \
+    && adduser -S $USER -G $USER
+
+USER $USER
+WORKDIR /home/$USER
+
+COPY --from=builder /home/$USER/str/package/lib/libSTServer.so /home/$USER/libSTServer.so
+COPY --from=builder /home/$USER/str/package/bin/crashpad_handler /home/$USER/crashpad_handler
+COPY --from=builder /home/$USER/str/package/bin/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
 COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
 COPY --from=builder /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 
-WORKDIR /home/server
 ENTRYPOINT ["./SkyrimTogetherServer"]
 
 EXPOSE 10578/udp

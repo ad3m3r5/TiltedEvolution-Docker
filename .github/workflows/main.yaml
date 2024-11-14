@@ -60,10 +60,15 @@ jobs:
           #platforms: linux/amd64,linux/arm64,linux/arm/v7
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.GIT_TAG }}
+          tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.GIT_TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.GIT_TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-${{ env.GIT_TAG }}
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.GIT_TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-${{ env.GIT_TAG }}
           build-args: |
             BRANCH=${{ env.GIT_TAG_V }}
 
@@ -76,9 +81,13 @@ jobs:
           #platforms: linux/amd64,linux/arm64,linux/arm/v7
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.GIT_TAG }}
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.GIT_TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.GIT_TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.GIT_TAG }}
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.GIT_TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.GIT_TAG }}
           build-args: |
             BRANCH=${{ env.GIT_TAG }}

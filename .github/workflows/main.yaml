@@ -10,14 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get latest git tag
+      - name: Get latest tags
         run: |
-          echo "GIT_TAG=$(curl -sL https://api.github.com/repos/tiltedphoques/TiltedEvolution/tags | jq -r '.[].name' | sort -r | head -n 1 | sed 's/v//')" | tee $GITHUB_ENV
-          echo "GIT_TAG_V=$(curl -sL https://api.github.com/repos/tiltedphoques/TiltedEvolution/tags | jq -r '.[].name' | sort -r | head -n 1)" | tee $GITHUB_ENV
-
-      - name: Get latest Docker tag
-        run: |
-          echo "DOCKER_TAG=$(curl -sL https://hub.docker.com/v2/repositories/${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server/tags | jq -r '.results[].name' | grep -v "latest" | sort -r | head -n 1)" | tee $GITHUB_ENV
+          echo "GIT_TAG=$(curl -sL https://api.github.com/repos/tiltedphoques/TiltedEvolution/tags | jq -r '.[].name' | sort -r | head -n 1 | sed 's/v//')" >> $GITHUB_ENV
+          echo "GIT_TAG_V=$(curl -sL https://api.github.com/repos/tiltedphoques/TiltedEvolution/tags | jq -r '.[].name' | sort -r | head -n 1)" >> $GITHUB_ENV
+          echo "DOCKER_TAG=$(curl -sL https://hub.docker.com/v2/repositories/${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server/tags | jq -r '.results[].name' | grep -v "latest" | sort -r | head -n 1)" >> $GITHUB_ENV
 
       - name: Output latest Tags
         run: |

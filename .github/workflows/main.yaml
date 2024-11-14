@@ -60,7 +60,6 @@ jobs:
           #platforms: linux/amd64,linux/arm64,linux/arm/v7
           platforms: linux/amd64,linux/arm64
           tags: |
-          tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.GIT_TAG }}

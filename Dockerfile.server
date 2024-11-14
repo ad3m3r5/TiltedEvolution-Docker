@@ -1,6 +1,5 @@
 # Build Container
-#FROM ad3m3r5/tiltedevolution-builder:latest AS builder
-FROM builder:local AS builder
+FROM ad3m3r5/tiltedevolution-builder:latest AS builder
 
 ARG REPO=https://github.com/tiltedphoques/TiltedEvolution.git
 #ARG BRANCH=master

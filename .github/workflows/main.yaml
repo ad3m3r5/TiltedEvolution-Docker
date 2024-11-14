@@ -22,6 +22,7 @@ jobs:
       - name: Output latest Tags
         run: |
           echo "Git: ${{ env.GIT_TAG }}"
+          echo "Git: ${{ env.GIT_TAG_V }}"
           echo "Docker: ${{ env.DOCKER_TAG }}"
 
       - name: Checkout repository

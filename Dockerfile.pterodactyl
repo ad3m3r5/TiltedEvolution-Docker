@@ -1,6 +1,5 @@
 ARG VERSION=latest
-
-FROM ad3m3r5/tiltedevolution-server:$VERSION AS server
+ARG SOURCE_CONTAINER=ad3m3r5/tiltedevolution-server:$VERSION
 
 FROM alpine:3.18
 
@@ -17,11 +16,11 @@ USER $USER
 WORKDIR /home/$USER
 ENV USER=$USER HOME=/home/$USER
 
-COPY --from=builder /home/tilted/libSTServer.so /home/$USER/libSTServer.so
-COPY --from=builder /home/tilted/crashpad_handler /home/$USER/crashpad_handler
-COPY --from=builder /home/tilted/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
-COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
-COPY --from=builder /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
+COPY --from=$SOURCE_CONTAINER /home/tilted/libSTServer.so /home/$USER/libSTServer.so
+COPY --from=$SOURCE_CONTAINER /home/tilted/crashpad_handler /home/$USER/crashpad_handler
+COPY --from=$SOURCE_CONTAINER /home/tilted/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
+COPY --from=$SOURCE_CONTAINER /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
+COPY --from=$SOURCE_CONTAINER /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 
 COPY ./entrypoint.sh /entrypoint.sh
 

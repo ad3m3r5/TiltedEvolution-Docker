@@ -2,8 +2,7 @@
 FROM ad3m3r5/tiltedevolution-builder:latest AS builder
 
 ARG REPO=https://github.com/tiltedphoques/TiltedEvolution.git
-#ARG BRANCH=master
-ARG BRANCH=v1.6.8
+ARG BRANCH=master
 
 SHELL ["/bin/bash", "-c"]
 
@@ -13,7 +12,6 @@ RUN source ~/.xmake/profile \
     && xmake config -m release -y \
     && xmake -y \
     && xmake install -o package -y
-
 
 
 # Server Container

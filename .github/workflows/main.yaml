@@ -5,8 +5,13 @@ on:
 #  - cron: "0 */2 * * *"
   workflow_dispatch:
 
+env:
+  #PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
+  #PLATFORMS: "linux/amd64,linux/arm64"
+  PLATFORMS: "linux/amd64"
+
 jobs:
-  build:
+  main:
     runs-on: ubuntu-latest
 
     steps:
@@ -55,8 +60,7 @@ jobs:
         with:
           push: true
           file: Dockerfile.server
-          #platforms: linux/amd64,linux/arm64,linux/arm/v7
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ env.PLATFORMS }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
@@ -75,8 +79,7 @@ jobs:
         with:
           push: true
           file: Dockerfile.pterodactyl
-          #platforms: linux/amd64,linux/arm64,linux/arm/v7
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ env.PLATFORMS }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest

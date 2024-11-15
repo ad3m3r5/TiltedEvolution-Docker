@@ -4,37 +4,29 @@ FROM ad3m3r5/tiltedevolution:builder-latest-debian AS builder
 ARG REPO=https://github.com/tiltedphoques/TiltedEvolution.git
 ARG BRANCH=master
 
-SHELL ["/bin/bash", "-c"]
-
 RUN source ~/.xmake/profile \
     && git clone --recursive -b $BRANCH $REPO ./str \
     && cd str \
     && xmake config -m release -y \
     && xmake -y \
-    && xmake install -o package -y
+    && xmake install -o package -y \
+    && cp /usr/lib/*/libstdc++.so.6 /usr/lib/libstdc++.so.6
 
 
 # Server Container
-FROM debian:12
+FROM gcr.io/distroless/base-debian12
 
 ARG USER=tilted
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN adduser --disabled-password --gecos "" $USER \
-  && apt update \
-  && apt install -y --no-install-recommends \
-    ca-certificates \
-    tzdata \
-    openssl \
-    libstdc++6 \
-  && rm -rf /var/lib/apt/lists/*
-
-USER $USER
-WORKDIR /home/$USER
 
 COPY --from=builder /home/$USER/str/package/lib/libSTServer.so /home/$USER/libSTServer.so
 COPY --from=builder /home/$USER/str/package/bin/crashpad_handler /home/$USER/crashpad_handler
 COPY --from=builder /home/$USER/str/package/bin/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
+COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
+
+USER $USER
+WORKDIR /home/$USER
 
 ENTRYPOINT ["./SkyrimTogetherServer"]
 

@@ -4,6 +4,17 @@ This repository contains custom Docker images for the [Tilted Evolution](https:/
 I am not affiliated with the Tilted Evolution or Pterodactyl development teams, projects, or any other related teams or pojects.
 
 > [!WARNING]
+> Current Supported Platforms
+> alpine:
+>   builder: amd64, arm64, arm/v7
+>   server: amd64
+>   pterodactyl: amd64
+> debian:
+>   builder: amd64, arm64
+>   server: amd64, arm64
+>   pterodactyl: amd64, arm64
+
+> [!WARNING]
 > There are currently issues with newer version of Alpine and building for glibc.  
 > On top of that, there are also issues alpine and the latest TiltedEvolution build for arm.  
 > This may require switching to a different container based image, such as Debian.  

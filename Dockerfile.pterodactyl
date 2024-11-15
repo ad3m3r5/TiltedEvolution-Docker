@@ -17,11 +17,11 @@ USER $USER
 WORKDIR /home/$USER
 ENV USER=$USER HOME=/home/$USER
 
-COPY --from=server /home/tilted/libSTServer.so /home/$USER/libSTServer.so
-COPY --from=server /home/tilted/crashpad_handler /home/$USER/crashpad_handler
-COPY --from=server /home/tilted/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
-COPY --from=server /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
-COPY --from=server /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
+COPY --from=server --chown $USER:$USER /home/tilted/libSTServer.so /home/$USER/libSTServer.so
+COPY --from=server --chown $USER:$USER /home/tilted/crashpad_handler /home/$USER/crashpad_handler
+COPY --from=server --chown $USER:$USER /home/tilted/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
+COPY --from=server --chown $USER:$USER /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
+COPY --from=server --chown $USER:$USER /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 
 COPY ./entrypoint.sh /entrypoint.sh
 

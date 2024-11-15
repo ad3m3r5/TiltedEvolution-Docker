@@ -19,7 +19,7 @@ RUN adduser --disabled-password --gecos "" $USER \
       unzip \
       gcc-10 \
       g++-10 \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
   && cp /usr/lib/*/libstdc++.so.? /usr/lib/
 
 USER $USER

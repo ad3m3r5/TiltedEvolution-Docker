@@ -68,12 +68,12 @@ jobs:
           file: debian/Dockerfile.builder
           platforms: ${{ env.PLATFORMS }}
           #   tiltedevolution-builder
-          #     latest
-          #     {{ TAG }}
+          #     latest-debian
+          #     {{ TAG }}-debian
           #   tiltedevolution
-          #     builder
-          #     builder-latest
-          #     builder-{{ TAG }}
+          #     builder-debian
+          #     builder-latest-debian
+          #     builder-{{ TAG }}-debian
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:latest-debian
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:${{ env.TAG }}-debian

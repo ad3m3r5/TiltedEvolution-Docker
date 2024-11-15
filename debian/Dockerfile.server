@@ -15,14 +15,19 @@ RUN source ~/.xmake/profile \
 
 
 # Server Container
-FROM alpine:3.18
+FROM debian:12
 
 ARG USER=tilted
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apk upgrade --no-cache \
-    && apk add libstdc++ \
-    && addgroup -S $USER \
-    && adduser -S $USER -G $USER
+RUN adduser --disabled-password --gecos "" $USER \
+  && apt update \
+  && apt install -y --no-install-recommends \
+    ca-certificates \
+    tzdata \
+    openssl \
+    libstdc++6 \
+  && rm -rf /var/lib/apt/lists/*
 
 USER $USER
 WORKDIR /home/$USER

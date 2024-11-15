@@ -15,7 +15,8 @@ RUN adduser --disabled-password --gecos "" $USER \
       wget \
       unzip \
       gcc-12 \
-      g++-12
+      g++-12 \
+  && rm -rf /var/lib/apt/lists/*
 
 USER $USER
 

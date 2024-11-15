@@ -5,25 +5,26 @@ FROM ad3m3r5/tiltedevolution-server:$VERSION AS server
 FROM alpine:3.18
 
 ARG USER=container
+ENV USER=$USER HOME=/home/$USER
+WORKDIR /home/$USER
+
+COPY --from=server /home/tilted/libSTServer.so .
+COPY --from=server /home/tilted/crashpad_handler .
+COPY --from=server /home/tilted/SkyrimTogetherServer .
+COPY --from=server /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
+COPY --from=server /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
+
+COPY ./entrypoint.sh /entrypoint.sh
 
 RUN apk upgrade --no-cache \
     && apk add --no-cache \
       ca-certificates \
       tzdata \
       openssl \
-    && adduser --disabled-password --home /home/$USER $USER
+    && adduser --disabled-password --home /home/$USER $USER \
+    && chown -R $USER:$USER /home/$USER
 
 USER $USER
-WORKDIR /home/$USER
-ENV USER=$USER HOME=/home/$USER
-
-COPY --from=server --chown $USER:$USER /home/tilted/libSTServer.so /home/$USER/libSTServer.so
-COPY --from=server --chown $USER:$USER /home/tilted/crashpad_handler /home/$USER/crashpad_handler
-COPY --from=server --chown $USER:$USER /home/tilted/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
-COPY --from=server --chown $USER:$USER /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
-COPY --from=server --chown $USER:$USER /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
-
-COPY ./entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT []
 CMD ["/bin/ash", "/entrypoint.sh"]

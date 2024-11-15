@@ -4,6 +4,8 @@ FROM ad3m3r5/tiltedevolution:builder-latest-debian AS builder
 ARG REPO=https://github.com/tiltedphoques/TiltedEvolution.git
 ARG BRANCH=master
 
+SHELL ["/bin/bash", "-c"]
+
 RUN source ~/.xmake/profile \
     && git clone --recursive -b $BRANCH $REPO ./str \
     && cd str \

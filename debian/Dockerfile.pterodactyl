@@ -19,11 +19,11 @@ FROM gcr.io/distroless/base-debian12
 ENV USER=$USER HOME=/home/$USER
 
 # server files
-COPY --from=server --chown container:container /home/tilted/libSTServer.so /home/server/libSTServer.so 
-COPY --from=server --chown container:container /home/tilted/crashpad_handler /home/server/crashpad_handler
-COPY --from=server --chown container:container /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
+COPY --from=server --chown=container:container /home/tilted/libSTServer.so /home/server/libSTServer.so 
+COPY --from=server --chown=container:container /home/tilted/crashpad_handler /home/server/crashpad_handler
+COPY --from=server --chown=container:container /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
 
-COPY --chown container:container ./entrypoint.sh /entrypoint.sh
+COPY --chown=container:container ./entrypoint.sh /entrypoint.sh
 
 # system files
 COPY --from=busybox /busybox/sh /bin/sh

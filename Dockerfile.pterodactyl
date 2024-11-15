@@ -8,9 +8,9 @@ ARG USER=container
 ENV USER=$USER HOME=/home/$USER
 WORKDIR /home/$USER
 
-COPY --from=server /home/tilted/libSTServer.so /tilted/libSTServer.so 
-COPY --from=server /home/tilted/crashpad_handler /tilted/crashpad_handler
-COPY --from=server /home/tilted/SkyrimTogetherServer /tilted/SkyrimTogetherServer
+COPY --from=server /home/tilted/libSTServer.so /home/server/libSTServer.so 
+COPY --from=server /home/tilted/crashpad_handler /home/server/crashpad_handler
+COPY --from=server /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
 COPY --from=server /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
 COPY --from=server /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 
@@ -23,7 +23,6 @@ RUN apk upgrade --no-cache \
       openssl \
     && adduser --disabled-password --home /home/$USER $USER \
     && chown -R $USER:$USER /home/$USER \
-    && chown -R $USER:$USER /tilted \
     && chown -R $USER:$USER /entrypoint.sh \
     && chmod +x /entrypoint.sh
 

@@ -26,4 +26,4 @@ COPY --from=server /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 COPY ./entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT []
-CMD ["/bin/bash", "/entrypoint.sh"]
+CMD ["/bin/ash", "/entrypoint.sh"]

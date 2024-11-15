@@ -1,4 +1,4 @@
-name: "[server] Force Build and Push"
+name: "[pterodactyl] Force Build and Push"
 # run every two hours to check for updates
 on:
 #  schedule:
@@ -49,20 +49,20 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push - server
+      - name: Build and push - pterodactyl
         uses: docker/build-push-action@v6
         with:
           push: true
-          file: Dockerfile.server
+          file: Dockerfile.pterodactyl
           platforms: ${{ env.PLATFORMS }}
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.GIT_TAG }}
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-${{ env.GIT_TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.GIT_TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-${{ env.GIT_TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.GIT_TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.GIT_TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.GIT_TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.GIT_TAG }}
           build-args: |
-            BRANCH=${{ env.GIT_TAG_V }}
+            BRANCH=${{ env.GIT_TAG }}

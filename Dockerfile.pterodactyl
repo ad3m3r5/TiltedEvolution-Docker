@@ -23,6 +23,7 @@ RUN apk upgrade --no-cache \
       openssl \
     && adduser --disabled-password --home /home/$USER $USER \
     && chown -R $USER:$USER /home/$USER \
+    && chown -R $USER:$USER /tilted \
     && chown -R $USER:$USER /entrypoint.sh \
     && chmod +x /entrypoint.sh
 

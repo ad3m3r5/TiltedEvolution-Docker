@@ -3,6 +3,11 @@ This repository contains custom Docker images for the [Tilted Evolution](https:/
 
 I am not affiliated with the Tilted Evolution or Pterodactyl development teams, projects, or any other related teams or pojects.
 
+> [!WARNING]
+> There are currently issues with newer version of Alpine and building for glibc.
+> On top of that, there are also issues with current versions and the latest TiltedEvolution build.
+> This may require switching to a different container based image, such as Debian.
+
 ## Images
 * [![Docker Hub](https://img.shields.io/badge/DockerHub-builder-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-builder) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-builder/latest?logo=docker&style=plastic)
 * [![Docker Hub](https://img.shields.io/badge/DockerHub-server-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-server) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-server/latest?logo=docker&style=plastic)

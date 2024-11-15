@@ -44,14 +44,23 @@ jobs:
           push: true
           file: Dockerfile.server
           platforms: ${{ env.PLATFORMS }}
+          #   tiltedevolution-server
+          #     latest
+          #     {{ TAG }}
+          #   tiltedevolution
+          #     server
+          #     server-latest
+          #     server-{{ TAG }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-${{ env.TAG }}
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-${{ env.TAG }}
           build-args: |
             BRANCH=v${{ env.TAG }}

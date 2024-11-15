@@ -44,14 +44,23 @@ jobs:
           push: true
           file: Dockerfile.pterodactyl
           platforms: ${{ env.PLATFORMS }}
+          #   tiltedevolution-pterodactyl
+          #     latest
+          #     {{ TAG }}
+          #   tiltedevolution
+          #     pterodactyl
+          #     pterodactyl-latest
+          #     pterodactyl-{{ TAG }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.TAG }}
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.TAG }}
           build-args: |
             BRANCH=${{ env.TAG }}

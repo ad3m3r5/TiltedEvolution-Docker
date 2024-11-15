@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_VERSION: "1.2.0"
+  TAG: "1.2.0"
   PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6"
   #PLATFORMS: "linux/amd64,linux/arm64"
   #PLATFORMS: "linux/amd64"
@@ -42,12 +42,21 @@ jobs:
           push: true
           file: Dockerfile.builder
           platforms: ${{ env.PLATFORMS }}
+          #   tiltedevolution-builder
+          #     latest
+          #     {{ TAG }}
+          #   tiltedevolution
+          #     builder
+          #     builder-latest
+          #     builder-{{ TAG }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:latest
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:${{ env.TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:${{ env.IMAGE_VERSION }}
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-${{ env.IMAGE_VERSION }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-${{ env.TAG }}
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:${{ env.TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:${{ env.IMAGE_VERSION }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-${{ env.IMAGE_VERSION }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-${{ env.TAG }}

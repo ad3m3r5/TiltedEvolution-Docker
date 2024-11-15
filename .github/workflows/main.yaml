@@ -61,14 +61,23 @@ jobs:
           push: true
           file: Dockerfile.server
           platforms: ${{ env.PLATFORMS }}
+          #   tiltedevolution-server
+          #     latest
+          #     {{ TAG }}
+          #   tiltedevolution
+          #     server
+          #     server-latest
+          #     server-{{ TAG }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.GIT_TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-${{ env.GIT_TAG }}
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.GIT_TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-${{ env.GIT_TAG }}
           build-args: |
             BRANCH=${{ env.GIT_TAG_V }}
@@ -80,14 +89,23 @@ jobs:
           push: true
           file: Dockerfile.pterodactyl
           platforms: ${{ env.PLATFORMS }}
+          #   tiltedevolution-pterodactyl
+          #     latest
+          #     {{ TAG }}
+          #   tiltedevolution
+          #     pterodactyl
+          #     pterodactyl-latest
+          #     pterodactyl-{{ TAG }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.GIT_TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.GIT_TAG }}
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.GIT_TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.GIT_TAG }}
           build-args: |
             BRANCH=${{ env.GIT_TAG }}

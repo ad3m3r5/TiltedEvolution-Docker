@@ -16,13 +16,16 @@ RUN source ~/.xmake/profile \
 
 
 # Server Container
-FROM gcr.io/distroless/base-debian12
+FROM gcr.io/distroless/base-debian12:debug
 
 ARG USER=tilted
 
-COPY --from=builder /home/$USER/str/package/lib/libSTServer.so /home/$USER/libSTServer.so
-COPY --from=builder /home/$USER/str/package/bin/crashpad_handler /home/$USER/crashpad_handler
-COPY --from=builder /home/$USER/str/package/bin/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
+# server files
+COPY --from=builder --chown tilted:tilted /home/$USER/str/package/lib/libSTServer.so /home/$USER/libSTServer.so
+COPY --from=builder --chown tilted:tilted /home/$USER/str/package/bin/crashpad_handler /home/$USER/crashpad_handler
+COPY --from=builder --chown tilted:tilted /home/$USER/str/package/bin/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
+
+# system files
 COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group

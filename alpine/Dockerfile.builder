@@ -19,7 +19,6 @@ RUN addgroup -S $USER \
         curl \
         wget \
         linux-headers \
-        bash \
         p7zip \
         perl \
         xz \

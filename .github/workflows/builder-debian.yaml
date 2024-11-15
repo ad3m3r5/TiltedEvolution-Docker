@@ -10,12 +10,12 @@ env:
   #PLATFORMS: "linux/amd64"
 
 jobs:
-  builder:
+  builder-debian:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -36,36 +36,11 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push - builder [alpine]
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          file: alpine/Dockerfile.builder
-          platforms: ${{ env.PLATFORMS }}
-          #   tiltedevolution-builder
-          #     latest
-          #     {{ TAG }}
-          #   tiltedevolution
-          #     builder
-          #     builder-latest
-          #     builder-{{ TAG }}
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:${{ env.TAG }}
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-${{ env.TAG }}
-
       - name: Build and push - builder [debian]
         uses: docker/build-push-action@v6
         with:
           push: true
-          file: debian/Dockerfile.builder
+          file: ./debian/Dockerfile.builder
           platforms: ${{ env.PLATFORMS }}
           #   tiltedevolution-builder
           #     latest

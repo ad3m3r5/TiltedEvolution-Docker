@@ -1,26 +1,26 @@
 # TiltedEvolution-Docker
-This repository contains custom Docker images for the [Tilted Evolution](https://github.com/tiltedphoques/TiltedEvolution) / [Skyrim Together Reborn](https://skyrim-together.com/) project using a base of Alpine Linux. There is also a Docker image and Pterodactyl egg for easily running the game server using [Pterodactyl](https://pterodactyl.io/).
+This repository contains custom Docker images for the [Tilted Evolution](https://github.com/tiltedphoques/TiltedEvolution) / [Skyrim Together Reborn](https://skyrim-together.com/) project using a base of Alpine and Debian. There is also a Docker image and Pterodactyl egg for easily running the game server using [Pterodactyl](https://pterodactyl.io/).
 
 I am not affiliated with the Tilted Evolution or Pterodactyl development teams, projects, or any other related teams or pojects.
 
 > [!WARNING]
 > There are currently issues with newer version of Alpine and building for glibc.  
-> On top of that, there are also issues with current versions and the latest TiltedEvolution build.  
+> On top of that, there are also issues alpine and the latest TiltedEvolution build for arm.  
 > This may require switching to a different container based image, such as Debian.  
 
 ## Images
-* [![Docker Hub](https://img.shields.io/badge/DockerHub-builder-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-builder) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-builder/latest?logo=docker&style=plastic)
-* [![Docker Hub](https://img.shields.io/badge/DockerHub-server-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-server) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-server/latest?logo=docker&style=plastic)
-* [![Docker Hub](https://img.shields.io/badge/DockerHub-pterodactyl-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution-pterodactyl) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution-pterodactyl/latest?logo=docker&style=plastic)
+* [![Docker Hub](https://img.shields.io/badge/DockerHub-builder-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution/builder-latest?logo=docker&style=plastic)
+* [![Docker Hub](https://img.shields.io/badge/DockerHub-server-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution/server-latest?logo=docker&style=plastic)
+* [![Docker Hub](https://img.shields.io/badge/DockerHub-pterodactyl-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution/pterodactyl-latest?logo=docker&style=plastic)
 
 ## Building
-  * `docker build -t tiltedevolution-builder:latest -f Dockerfile.builder .`
-  * `docker build -t tiltedevolution-server:latest -f Dockerfile .`
+  * `docker build -t tiltedevolution:builder -f Dockerfile.builder .`
+  * `docker build -t tiltedevolution:server -f Dockerfile.server .`
     * Dockerfile will default to the `master` branch. Specific tag versions can be used instead.
-    * example: `docker build -t tiltedevolution-server:1.3.2 --build-arg BRANCH=v1.3.2 -f Dockerfile .`
-  * `docker build -t tiltedevolution-pterodactyl:latest -f Dockerfile.pterodactyl .`
-    * Dockerfile will default to `latest` tag of the `tiltedevolution-server` base image. Specific tag versions can be used instead.
-    * example: `docker build -t tiltedevolution-pterodactyl:1.3.2 --build-arg VERSION=1.3.2 -f Dockerfile.pterodactyl .`
+    * example: `docker build -t tiltedevolution:server-1.6.8 --build-arg BRANCH=v1.6.8 -f Dockerfile .`
+  * `docker build -t tiltedevolution:pterodactyl -f Dockerfile.pterodactyl .`
+    * Dockerfile will default to `latest` tag of the `tiltedevolution` base image. Specific tag versions can be used instead.
+    * example: `docker build -t tiltedevolution:pterodactyl-1.3.2 --build-arg VERSION=1.3.2 -f Dockerfile.pterodactyl .`
 
 
 ## Running
@@ -29,12 +29,13 @@ The original [wiki](https://wiki.tiltedphoques.com/tilted-online/guides/server-g
 Example:
 ```
 mkdir -p /opt/docker/skyrimserver/{config,logs,Data}
+chown -R 1000:1000 /opt/docker/skyrimserver/
 
 docker run -d -it --name skyrimserver -p 10578:10578/udp \
-  -v /opt/docker/skyrimserver/config:/home/server/config \
-  -v /opt/docker/skyrimserver/Data:/home/server/Data \
-  -v /opt/docker/skyrimserver/logs:/home/server/logs \
-  ad3m3r5/tiltedevolution-server:latest
+  -v /opt/docker/skyrimserver/config:/home/tilted/config \
+  -v /opt/docker/skyrimserver/Data:/home/tilted/Data \
+  -v /opt/docker/skyrimserver/logs:/home/tilted/logs \
+  ad3m3r5/tiltedevolution:server
 ```
 
 ## Pterodactyl

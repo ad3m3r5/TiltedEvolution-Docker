@@ -1,6 +1,6 @@
 ARG VERSION=latest
 
-FROM ad3m3r5/tiltedevolution-server:$VERSION AS server
+FROM ad3m3r5/tiltedevolution:server-$VERSION AS server
 
 FROM alpine:3.18
 
@@ -11,8 +11,6 @@ WORKDIR /home/$USER
 COPY --from=server /home/tilted/libSTServer.so /home/server/libSTServer.so 
 COPY --from=server /home/tilted/crashpad_handler /home/server/crashpad_handler
 COPY --from=server /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
-COPY --from=server /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
-COPY --from=server /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 
 COPY ./entrypoint.sh /entrypoint.sh
 
@@ -21,6 +19,7 @@ RUN apk upgrade --no-cache \
       ca-certificates \
       tzdata \
       openssl \
+      libstdc++ \
     && adduser --disabled-password --home /home/$USER $USER \
     && chown -R $USER:$USER /home/$USER \
     && chown -R $USER:$USER /entrypoint.sh \

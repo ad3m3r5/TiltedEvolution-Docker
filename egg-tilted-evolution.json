@@ -10,7 +10,7 @@
   "description": null,
   "features": null,
   "docker_images": {
-      "ad3m3r5\/tiltedevolution-pterodactyl:latest": "ad3m3r5\/tiltedevolution-pterodactyl:latest"
+      "ad3m3r5\/tiltedevolution:pterodactyl": "ad3m3r5\/tiltedevolution:pterodactyl"
   },
   "file_denylist": [],
   "startup": "\/home\/server\/SkyrimTogetherServer",

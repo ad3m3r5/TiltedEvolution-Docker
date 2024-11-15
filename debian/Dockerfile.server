@@ -11,8 +11,7 @@ RUN source ~/.xmake/profile \
     && cd str \
     && xmake config -m release -y \
     && xmake -y \
-    && xmake install -o package -y \
-    && cp /usr/lib/*/libstdc++.so.6 /usr/lib/libstdc++.so.6
+    && xmake install -o package -y
 
 
 # Server Container
@@ -26,7 +25,7 @@ COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/bin/crashpad_h
 COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/bin/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
 
 # system files
-COPY --from=builder /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
+COPY --from=builder /usr/lib/libstdc* /usr/lib/
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 

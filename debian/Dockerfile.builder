@@ -1,4 +1,4 @@
-FROM debian:12
+FROM debian:11
 
 ARG USER=tilted
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,9 +14,10 @@ RUN adduser --disabled-password --gecos "" $USER \
       curl \
       wget \
       unzip \
-      gcc-12 \
-      g++-12 \
+      gcc-10 \
+      g++-10 \
   && rm -rf /var/lib/apt/lists/*
+  && cp /usr/lib/*/libstdc++.so.? /usr/lib/
 
 USER $USER
 

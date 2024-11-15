@@ -27,7 +27,7 @@ COPY --chown=container:container ./entrypoint.sh /entrypoint.sh
 
 # system files
 COPY --from=busybox /busybox/sh /bin/sh
-COPY --from=server /usr/lib/libstdc++.so.6 /usr/lib/libstdc++.so.6
+COPY --from=server /usr/lib/libstdc* /usr/lib/
 COPY --from=intermediate /etc/passwd /etc/passwd
 COPY --from=intermediate /etc/group /etc/group
 

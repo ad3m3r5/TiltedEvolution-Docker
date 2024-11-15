@@ -2,6 +2,10 @@
 # Use debian:11 due to bugs with arm/v7 on debian:12 while building openssl
 #   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=999680
 #   https://github.com/openssl/openssl/issues/21630
+#
+# Debian 11 will require:
+#   cmake 3.20+ to be built and installed
+#   gcc-10, g++-10
 
 FROM debian:12
 
@@ -19,8 +23,8 @@ RUN adduser --disabled-password --gecos "" $USER \
       curl \
       wget \
       unzip \
-      gcc-10 \
-      g++-10 \
+      gcc-12 \
+      g++-12 \
   && rm -rf /var/lib/apt/lists/* \
   && cp /usr/lib/*/libstdc++.so.? /usr/lib/
 

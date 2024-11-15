@@ -11,7 +11,7 @@ env:
   PLATFORMS: "linux/amd64"
 
 jobs:
-  main:
+  server:
     runs-on: ubuntu-latest
 
     steps:

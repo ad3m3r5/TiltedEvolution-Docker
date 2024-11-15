@@ -5,6 +5,9 @@ on:
 
 env:
   IMAGE_VERSION: "1.2.0"
+  PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6"
+  #PLATFORMS: "linux/amd64,linux/arm64"
+  #PLATFORMS: "linux/amd64"
 
 jobs:
   builder:
@@ -38,8 +41,7 @@ jobs:
         with:
           push: true
           file: Dockerfile.builder
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          #platforms: linux/amd64,linux/arm64
+          platforms: ${{ env.PLATFORMS }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:latest
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-latest

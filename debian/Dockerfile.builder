@@ -1,3 +1,6 @@
+# Using debian:11 due to bugs with arm/v7 on debian:12 while building openssl
+#   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=999680
+#   https://github.com/openssl/openssl/issues/21630
 FROM debian:11
 
 ARG USER=tilted

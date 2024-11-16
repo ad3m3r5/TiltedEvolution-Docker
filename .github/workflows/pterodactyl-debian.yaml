@@ -45,11 +45,8 @@ jobs:
           file: debian/Dockerfile.pterodactyl
           platforms: ${{ env.PLATFORMS }}
           #   tiltedevolution-pterodactyl
-          #     latest-debian
           #     {{ TAG }}-debian
           #   tiltedevolution
-          #     pterodactyl-debian
-          #     pterodactyl-latest-debian
           #     pterodactyl-{{ TAG }}-debian
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.TAG }}-debian

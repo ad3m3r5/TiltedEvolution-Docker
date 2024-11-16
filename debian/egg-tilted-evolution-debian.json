@@ -4,13 +4,15 @@
       "version": "PTDL_v2",
       "update_url": null
   },
-  "exported_at": "2022-10-22T15:45:53-04:00",
-  "name": "Tilted Evolution",
+  "exported_at": "2024-11-15T19:23:32-05:00",
+  "name": "Tilted Evolution (Debian)",
   "author": "aaron@aarondemers.com",
-  "description": null,
+  "description": "Custom versions of the Tilted Evolution \/ Skyrim Together Reborn Docker images",
   "features": null,
   "docker_images": {
-      "ad3m3r5\/tiltedevolution:pterodactyl": "ad3m3r5\/tiltedevolution:pterodactyl"
+      "ad3m3r5\/tiltedevolution:pterodactyl-debian": "ad3m3r5\/tiltedevolution:pterodactyl-debian",
+      "ad3m3r5\/tiltedevolution:pterodactyl-latest-debian": "ad3m3r5\/tiltedevolution:pterodactyl-latest-debian",
+      "ad3m3r5\/tiltedevolution:pterodactyl-1.6.8-debian": "ad3m3r5\/tiltedevolution:pterodactyl-1.6.8-debian"
   },
   "file_denylist": [],
   "startup": "\/home\/server\/SkyrimTogetherServer",
@@ -23,7 +25,7 @@
   "scripts": {
       "installation": {
           "script": null,
-          "container": "alpine:3.18",
+          "container": "alpine:3.4",
           "entrypoint": "ash"
       }
   },

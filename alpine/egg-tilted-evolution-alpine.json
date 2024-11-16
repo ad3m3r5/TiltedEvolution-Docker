@@ -1,0 +1,42 @@
+{
+  "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+  "meta": {
+      "version": "PTDL_v2",
+      "update_url": null
+  },
+  "exported_at": "2024-11-15T19:28:28-05:00",
+  "name": "Tilted Evolution (Alpine)",
+  "author": "aaron@aarondemers.com",
+  "description": "Custom versions of the Tilted Evolution \/ Skyrim Together Reborn Docker images",
+  "features": null,
+  "docker_images": {
+      "ad3m3r5\/tiltedevolution:pterodactyl": "ad3m3r5\/tiltedevolution:pterodactyl",
+      "ad3m3r5\/tiltedevolution:pterodactyl-latest": "ad3m3r5\/tiltedevolution:pterodactyl-latest",
+      "ad3m3r5\/tiltedevolution:pterodactyl-1.6.8": "ad3m3r5\/tiltedevolution:pterodactyl-1.6.8",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.6.7": "ad3m3r5\/tiltedevolution-pterodactyl:1.6.7",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.6.6": "ad3m3r5\/tiltedevolution-pterodactyl:1.6.6",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.6.5": "ad3m3r5\/tiltedevolution-pterodactyl:1.6.5",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.6.4": "ad3m3r5\/tiltedevolution-pterodactyl:1.6.4",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.6.3": "ad3m3r5\/tiltedevolution-pterodactyl:1.6.3",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.6.1": "ad3m3r5\/tiltedevolution-pterodactyl:1.6.1",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.5.0": "ad3m3r5\/tiltedevolution-pterodactyl:1.5.0",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.4.1": "ad3m3r5\/tiltedevolution-pterodactyl:1.4.1",
+      "ad3m3r5\/tiltedevolution-pterodactyl:1.3.2": "ad3m3r5\/tiltedevolution-pterodactyl:1.3.2"
+  },
+  "file_denylist": [],
+  "startup": "\/home\/server\/SkyrimTogetherServer",
+  "config": {
+      "files": "{}",
+      "startup": "{\r\n    \"done\": \"Server started\"\r\n}",
+      "logs": "{}",
+      "stop": "\/quit"
+  },
+  "scripts": {
+      "installation": {
+          "script": null,
+          "container": "alpine:3.4",
+          "entrypoint": "ash"
+      }
+  },
+  "variables": []
+}

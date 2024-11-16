@@ -6,12 +6,12 @@ I am not affiliated with the Tilted Evolution or Pterodactyl development teams, 
 > [!IMPORTANT]  
 > Current Supported Platforms  
 > - alpine:  
->   - builder: amd64, arm64, arm/v7  
->   - server/pterodactyl: amd64  
+>   - builder: `amd64`, `arm64`, `arm/v7`  
+>   - server/pterodactyl: `amd64`  
 >  
 > - debian:  
->   - builder: amd64, arm64, arm/v7  
->   - server/pterodactyl: amd64, arm64  
+>   - builder: `amd64`, `arm64`, `arm/v7`  
+>   - server/pterodactyl: `amd64`, `arm64`  
 
 > [!WARNING]  
 > There are currently issues with newer version of Alpine and building for glibc.  
@@ -19,6 +19,39 @@ I am not affiliated with the Tilted Evolution or Pterodactyl development teams, 
 > This may require switching to a different container based image, such as Debian.  
 
 ## Images
+
+Images starting with `1.6.8` should be available on Docker Hub and ghcr.io. They should also have the "newer" versioning under a uniform name of `tiltedevolution`.  
+
+- Alpine
+  - tiltedevolution
+    - Tags:
+      - `builder-latest`, `builder-<version-of-builder>`
+      - `server-latest`, `server-<version-of-builder>`
+      - `pterodactyl-latest`, `pterodactyl-<version-of-builder>`
+  - tiltedevolution-builder
+    - Tags: `latest`, `<version-of-builder>`
+  - tiltedevolution-server
+    - Tags: `latest`, `<version-of-tilted>`
+  - tiltedevolution-pterodactyl
+    - Tags: `latest`, `<version-of-tilted>`
+
+<br />
+
+- Debian
+  - tiltedevolution
+    - Tags:
+      - `builder-latest-debian`, `builder-<version-of-builder>-debian`
+      - `server-latest-debian`, `server-<version-of-builder>-debian`
+      - `pterodactyl-latest-debian`, `pterodactyl-<version-of-builder>-debian`
+  - tiltedevolution-builder
+    - Tags: `latest-debian`, `<version-of-builder>-debian`
+  - tiltedevolution-server
+    - Tags: `latest-debian`, `<version-of-tilted>-debian`
+  - tiltedevolution-pterodactyl
+    - Tags: `latest-debian`, `<version-of-tilted>-debian`
+
+<br />
+
 - [![Docker Hub](https://img.shields.io/badge/DockerHub-builder-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution/builder-latest?logo=docker&style=plastic)
 - [![Docker Hub](https://img.shields.io/badge/DockerHub-server-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution/server-latest?logo=docker&style=plastic)
 - [![Docker Hub](https://img.shields.io/badge/DockerHub-pterodactyl-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution/pterodactyl-latest?logo=docker&style=plastic)
@@ -34,7 +67,9 @@ I am not affiliated with the Tilted Evolution or Pterodactyl development teams, 
 
 
 ## Running
-The original [wiki](https://wiki.tiltedphoques.com/tilted-online/guides/server-guide/linux-setup/docker-setup) information should still be used, but with the new image.
+The original [wiki](https://wiki.tiltedphoques.com/tilted-online/guides/server-guide/linux-setup/docker-setup) information should still be used, but with the new image.  
+
+Newer versions of this image do not run as root, so you will have to set the directory permissions as shown below.  
 
 Example:
 ```

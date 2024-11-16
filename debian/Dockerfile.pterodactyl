@@ -23,7 +23,7 @@ COPY --from=server --chown=container:container /home/tilted/libSTServer.so /home
 COPY --from=server --chown=container:container /home/tilted/crashpad_handler /home/server/crashpad_handler
 COPY --from=server --chown=container:container /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
 
-COPY --chown=container:container ./entrypoint.sh /entrypoint.sh
+COPY --chown=container:container ./debian/entrypoint.sh /entrypoint.sh
 
 # system files
 COPY --from=busybox /busybox/sh /bin/sh

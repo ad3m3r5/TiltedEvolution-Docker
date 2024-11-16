@@ -60,28 +60,3 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-${{ env.TAG }}
-
-      - name: Build and push - builder [debian]
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          file: debian/Dockerfile.builder
-          platforms: ${{ env.PLATFORMS }}
-          #   tiltedevolution-builder
-          #     latest-debian
-          #     {{ TAG }}-debian
-          #   tiltedevolution
-          #     builder-debian
-          #     builder-latest-debian
-          #     builder-{{ TAG }}-debian
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:latest-debian
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:${{ env.TAG }}-debian
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-debian
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-latest-debian
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-${{ env.TAG }}-debian
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:latest-debian
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:${{ env.TAG }}-debian
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-debian
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-latest-debian
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-${{ env.TAG }}-debian

@@ -12,7 +12,7 @@ COPY --from=server /home/tilted/libSTServer.so /home/server/libSTServer.so
 COPY --from=server /home/tilted/crashpad_handler /home/server/crashpad_handler
 COPY --from=server /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
 
-COPY ./entrypoint.sh /entrypoint.sh
+COPY ./alpine/entrypoint.sh /entrypoint.sh
 
 RUN apk upgrade --no-cache \
     && apk add --no-cache \

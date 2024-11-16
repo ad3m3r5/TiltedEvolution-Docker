@@ -59,7 +59,7 @@ jobs:
         if: ${{ env.GIT_TAG != env.DOCKER_TAG}}
         with:
           push: true
-          file: Dockerfile.server
+          file: alpine/Dockerfile.server
           platforms: ${{ env.PLATFORMS }}
           #   tiltedevolution-server
           #     latest
@@ -87,7 +87,7 @@ jobs:
         if: ${{ env.GIT_TAG != env.DOCKER_TAG}}
         with:
           push: true
-          file: Dockerfile.pterodactyl
+          file: alpine/Dockerfile.pterodactyl
           platforms: ${{ env.PLATFORMS }}
           #   tiltedevolution-pterodactyl
           #     latest
@@ -108,4 +108,4 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.GIT_TAG }}
           build-args: |
-            BRANCH=${{ env.GIT_TAG }}
+            VERSION=${{ env.GIT_TAG }}

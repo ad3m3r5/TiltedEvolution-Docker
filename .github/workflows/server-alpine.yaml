@@ -45,11 +45,8 @@ jobs:
           file: alpine/Dockerfile.server
           platforms: ${{ env.PLATFORMS }}
           #   tiltedevolution-server
-          #     latest
           #     {{ TAG }}
           #   tiltedevolution
-          #     server
-          #     server-latest
           #     server-{{ TAG }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.TAG }}

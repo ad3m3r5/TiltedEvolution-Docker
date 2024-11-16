@@ -45,11 +45,8 @@ jobs:
           file: debian/Dockerfile.server
           platforms: ${{ env.PLATFORMS }}
           #   tiltedevolution-server
-          #     latest-debian
           #     {{ TAG }}-debian
           #   tiltedevolution
-          #     server-debian
-          #     server-latest-debian
           #     server-{{ TAG }}-debian
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.TAG }}-debian

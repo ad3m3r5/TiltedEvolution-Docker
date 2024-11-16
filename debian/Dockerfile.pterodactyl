@@ -4,6 +4,7 @@ ARG VERSION=latest
 FROM debian:12 AS intermediate
 
 ARG USER=container
+ENV USER=$USER
 
 RUN adduser --disabled-password --gecos "" $USER
 

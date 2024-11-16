@@ -52,15 +52,9 @@ jobs:
           #     pterodactyl-latest-debian
           #     pterodactyl-{{ TAG }}-debian
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest-debian
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.TAG }}-debian
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-debian
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest-debian
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.TAG }}-debian
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:latest-debian
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.TAG }}-debian
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-debian
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest-debian
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.TAG }}-debian
           build-args: |
             VERSION=${{ env.TAG }}

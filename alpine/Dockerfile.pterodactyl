@@ -5,14 +5,9 @@ FROM ad3m3r5/tiltedevolution:server-$VERSION AS server
 FROM alpine:3.18
 
 ARG USER=container
-ENV USER=$USER HOME=/home/$USER
-WORKDIR /home/$USER
 
-COPY --from=server /home/tilted/libSTServer.so /home/server/libSTServer.so 
-COPY --from=server /home/tilted/crashpad_handler /home/server/crashpad_handler
-COPY --from=server /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
-
-COPY ./alpine/entrypoint.sh /entrypoint.sh
+ENV USER=$USER \
+    HOME=/home/$USER
 
 RUN apk upgrade --no-cache \
     && apk add --no-cache \
@@ -20,12 +15,16 @@ RUN apk upgrade --no-cache \
       tzdata \
       openssl \
       libstdc++ \
-    && adduser --disabled-password --home /home/$USER $USER \
-    && chown -R $USER:$USER /home/$USER \
-    && chown -R $USER:$USER /entrypoint.sh \
-    && chmod +x /entrypoint.sh
+    && adduser --disabled-password --home /home/$USER $USER
+
+COPY --from=server --chown=container:container /home/tilted/libSTServer.so /home/server/libSTServer.so 
+COPY --from=server --chown=container:container /home/tilted/crashpad_handler /home/server/crashpad_handler
+COPY --from=server --chown=container:container /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
+
+COPY --chown=container:container ./alpine/entrypoint.sh /entrypoint.sh
 
 USER $USER
+WORKDIR /home/$USER
 
 ENTRYPOINT []
 CMD ["/bin/ash", "/entrypoint.sh"]

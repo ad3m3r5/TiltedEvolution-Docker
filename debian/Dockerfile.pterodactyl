@@ -1,39 +1,24 @@
 ARG VERSION=latest
 
-# user debian image to create user
-FROM debian:12 AS intermediate
+FROM ad3m3r5/tiltedevolution:server-$VERSION-debian AS server
+
+FROM debian:12
 
 ARG USER=container
-ENV USER=$USER
+
+ENV USER=$USER \
+    HOME=/home/$USER
 
 RUN adduser --disabled-password --gecos "" $USER
 
-# use server image to copy server files
-FROM ad3m3r5/tiltedevolution:server-$VERSION-debian AS server
-
-# use distroless debug image for sh
-FROM gcr.io/distroless/base-debian12:debug AS busybox
-
-# use distroless debain for minimal base
-FROM gcr.io/distroless/base-debian12
-
-ENV USER=$USER HOME=/home/$USER
-
-# server files
 COPY --from=server --chown=container:container /home/tilted/libSTServer.so /home/server/libSTServer.so 
 COPY --from=server --chown=container:container /home/tilted/crashpad_handler /home/server/crashpad_handler
 COPY --from=server --chown=container:container /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
 
 COPY --chown=container:container ./debian/entrypoint.sh /entrypoint.sh
 
-# system files
-COPY --from=busybox /busybox/sh /bin/sh
-COPY --from=server /usr/lib/libstdc* /usr/lib/
-COPY --from=intermediate /etc/passwd /etc/passwd
-COPY --from=intermediate /etc/group /etc/group
-
 USER $USER
 WORKDIR /home/$USER
 
 ENTRYPOINT []
-CMD ["/bin/sh", "/entrypoint.sh"]
+CMD ["/bin/bash", "/entrypoint.sh"]

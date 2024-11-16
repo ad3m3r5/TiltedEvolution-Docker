@@ -25,11 +25,9 @@ RUN adduser --disabled-password --gecos "" $USER \
       unzip \
       gcc-12 \
       g++-12 \
-  && rm -rf /var/lib/apt/lists/* \
-  && cp /usr/lib/*/libstdc++.so.? /usr/lib/
+  && rm -rf /var/lib/apt/lists/*
 
 USER $USER
+WORKDIR /home/$USER
 
 RUN curl -fsSL https://xmake.io/shget.text | bash
-
-WORKDIR /home/$USER

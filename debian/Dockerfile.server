@@ -15,19 +15,18 @@ RUN source ~/.xmake/profile \
 
 
 # Server Container
-FROM gcr.io/distroless/base-debian12:debug
+FROM debian:12
 
 ARG USER=tilted
 
-# server files
+ENV USER=$USER \
+    HOME=/home/$USER
+
+RUN adduser --disabled-password --gecos "" $USER
+
 COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/lib/libSTServer.so /home/$USER/libSTServer.so
 COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/bin/crashpad_handler /home/$USER/crashpad_handler
 COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/bin/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
-
-# system files
-COPY --from=builder /usr/lib/libstdc* /usr/lib/
-COPY --from=builder /etc/passwd /etc/passwd
-COPY --from=builder /etc/group /etc/group
 
 USER $USER
 WORKDIR /home/$USER

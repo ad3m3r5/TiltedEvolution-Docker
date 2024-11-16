@@ -39,7 +39,6 @@ RUN addgroup -S $USER \
         libc6-compat
 
 USER $USER
+WORKDIR /home/$USER
 
 RUN curl -fsSL https://xmake.io/shget.text | bash
-
-WORKDIR /home/$USER

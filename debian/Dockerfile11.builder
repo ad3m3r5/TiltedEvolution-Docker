@@ -36,7 +36,6 @@ RUN adduser --disabled-password --gecos "" $USER \
     && make install
 
 USER $USER
+WORKDIR /home/$USER
 
 RUN curl -fsSL https://xmake.io/shget.text | bash
-
-WORKDIR /home/$USER

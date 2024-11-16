@@ -19,17 +19,20 @@ FROM alpine:3.18
 
 ARG USER=tilted
 
+ENV USER=$USER \
+    HOME=/home/$USER
+
 RUN apk upgrade --no-cache \
     && apk add libstdc++ \
     && addgroup -S $USER \
     && adduser -S $USER -G $USER
 
-USER $USER
-WORKDIR /home/$USER
-
 COPY --from=builder /home/$USER/str/package/lib/libSTServer.so /home/$USER/libSTServer.so
 COPY --from=builder /home/$USER/str/package/bin/crashpad_handler /home/$USER/crashpad_handler
 COPY --from=builder /home/$USER/str/package/bin/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
+
+USER $USER
+WORKDIR /home/$USER
 
 ENTRYPOINT ["./SkyrimTogetherServer"]
 

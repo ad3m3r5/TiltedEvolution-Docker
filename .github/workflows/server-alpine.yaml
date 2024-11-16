@@ -12,7 +12,7 @@ env:
   TAG: "1.6.7"
 
 jobs:
-  server:
+  server-alpine:
     runs-on: ubuntu-latest
 
     steps:

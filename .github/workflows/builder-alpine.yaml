@@ -1,4 +1,4 @@
-name: "[builder] Build and Push"
+name: "[builder-alpine] Build and Push"
 # run every two hours to check for updates
 on:
   workflow_dispatch:

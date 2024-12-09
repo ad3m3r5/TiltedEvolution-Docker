@@ -7,6 +7,7 @@ env:
   PLATFORMS: "linux/amd64,linux/arm64"
   #PLATFORMS: "linux/amd64"
   TAG: "1.7.1"
+  latest: "false"
 
 jobs:
   server-debian:
@@ -35,7 +36,9 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Build without latest
       - name: Build and push - server [debian]
+        if: ${{ env.latest == 'false' }}
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -57,6 +60,7 @@ jobs:
             BRANCH=v${{ env.TAG }}
 
       - name: Build and push - pterodactyl [debian]
+        if: ${{ env.latest == 'false' }}
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -73,6 +77,63 @@ jobs:
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.TAG }}-debian
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.TAG }}-debian
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.TAG }}-debian
+          build-args: |
+            VERSION=${{ env.TAG }}
+
+      # Build with latest
+      - name: Build and push - server [debian]
+        if: ${{ env.latest == 'false' }}
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: debian/Dockerfile.server
+          platforms: ${{ env.PLATFORMS }}
+          #   tiltedevolution-server
+          #     latest-debian
+          #     {{ TAG }}-debian
+          #   tiltedevolution
+          #     server-debian
+          #     server-latest-debian
+          #     server-{{ TAG }}-debian
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.TAG }}-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-${{ env.TAG }}-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:latest-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.TAG }}-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-${{ env.TAG }}-debian
+          build-args: |
+            BRANCH=v${{ env.TAG }}
+
+      - name: Build and push - pterodactyl [debian]
+        if: ${{ env.latest == 'false' }}
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: debian/Dockerfile.pterodactyl
+          platforms: ${{ env.PLATFORMS }}
+          #   tiltedevolution-pterodactyl
+          #     latest-debian
+          #     {{ TAG }}-debian
+          #   tiltedevolution
+          #     pterodactyl-debian
+          #     pterodactyl-latest-debian
+          #     pterodactyl-{{ TAG }}-debian
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.TAG }}-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.TAG }}-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:latest-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.TAG }}-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest-debian
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.TAG }}-debian
           build-args: |
             VERSION=${{ env.TAG }}

@@ -1,5 +1,4 @@
 name: "debug env"
-# run every two hours to check for updates
 on:
 #  schedule:
 #  - cron: "0 */2 * * *"

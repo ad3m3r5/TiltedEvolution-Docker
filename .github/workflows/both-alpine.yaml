@@ -1,4 +1,4 @@
-name: "[server-alpine] Force Build and Push"
+name: "[both-alpine] Force Build and Push"
 on:
   workflow_dispatch:
 

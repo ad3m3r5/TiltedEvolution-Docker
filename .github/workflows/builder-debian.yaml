@@ -1,13 +1,12 @@
 name: "[builder-debian] Build and Push"
-# run every two hours to check for updates
 on:
   workflow_dispatch:
 
 env:
-  TAG: "1.2.0"
   PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
   #PLATFORMS: "linux/amd64,linux/arm64"
   #PLATFORMS: "linux/amd64"
+  TAG: "1.2.0"
 
 jobs:
   builder-debian:

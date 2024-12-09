@@ -6,9 +6,10 @@ on:
   workflow_dispatch:
 
 env:
-  #PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
-  #PLATFORMS: "linux/amd64,linux/arm64"
-  PLATFORMS: "linux/amd64"
+  #ALPINE_PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
+  #ALPINE_PLATFORMS: "linux/amd64,linux/arm64"
+  ALPINE_PLATFORMS: "linux/amd64"
+  DEBIAN_PLATFORMS: "linux/amd64,linux/arm64"
 
 jobs:
   main:
@@ -54,13 +55,14 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Alpine - server
       - name: Build and push - server
         uses: docker/build-push-action@v6
         if: ${{ env.GIT_TAG != env.DOCKER_TAG}}
         with:
           push: true
           file: alpine/Dockerfile.server
-          platforms: ${{ env.PLATFORMS }}
+          platforms: ${{ env.ALPINE_PLATFORMS }}
           #   tiltedevolution-server
           #     latest
           #     {{ TAG }}
@@ -82,13 +84,14 @@ jobs:
           build-args: |
             BRANCH=${{ env.GIT_TAG_V }}
 
+      # Alpine - pterodactyl
       - name: Build and push - pterodactyl
         uses: docker/build-push-action@v6
         if: ${{ env.GIT_TAG != env.DOCKER_TAG}}
         with:
           push: true
           file: alpine/Dockerfile.pterodactyl
-          platforms: ${{ env.PLATFORMS }}
+          platforms: ${{ env.ALPINE_PLATFORMS }}
           #   tiltedevolution-pterodactyl
           #     latest
           #     {{ TAG }}
@@ -109,3 +112,59 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.GIT_TAG }}
           build-args: |
             VERSION=${{ env.GIT_TAG }}
+
+      # Debian - server
+      - name: Build and push - server [debian]
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: debian/Dockerfile.server
+          platforms: ${{ env.DEBIAN_PLATFORMS }}
+          #   tiltedevolution-server
+          #     latest-debian
+          #     {{ TAG }}-debian
+          #   tiltedevolution
+          #     server-debian
+          #     server-latest-debian
+          #     server-{{ TAG }}-debian
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.TAG }}-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-${{ env.TAG }}-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:latest-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.TAG }}-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-${{ env.TAG }}-debian
+          build-args: |
+            BRANCH=v${{ env.TAG }}
+
+      # Debian - pterodactyl
+      - name: Build and push - pterodactyl [debian]
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: debian/Dockerfile.pterodactyl
+          platforms: ${{ env.DEBIAN_PLATFORMS }}
+          #   tiltedevolution-pterodactyl
+          #     latest-debian
+          #     {{ TAG }}-debian
+          #   tiltedevolution
+          #     pterodactyl-debian
+          #     pterodactyl-latest-debian
+          #     pterodactyl-{{ TAG }}-debian
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.TAG }}-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest-debian
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.TAG }}-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:latest-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.TAG }}-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest-debian
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.TAG }}-debian
+          build-args: |
+            VERSION=${{ env.TAG }}

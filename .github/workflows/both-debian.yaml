@@ -1,4 +1,4 @@
-name: "[server-debian] Force Build and Push"
+name: "[both-debian] Force Build and Push"
 on:
   workflow_dispatch:
 

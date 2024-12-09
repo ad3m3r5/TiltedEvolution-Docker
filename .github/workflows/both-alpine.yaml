@@ -83,7 +83,7 @@ jobs:
 
       # Build with latest
       - name: Build and push - server [alpine]
-        if: ${{ env.latest == 'false' }}
+        if: ${{ env.latest == 'true' }}
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -111,7 +111,7 @@ jobs:
             BRANCH=v${{ env.TAG }}
 
       - name: Build and push - pterodactyl [alpine]
-        if: ${{ env.latest == 'false' }}
+        if: ${{ env.latest == 'true' }}
         uses: docker/build-push-action@v6
         with:
           push: true

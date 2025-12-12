@@ -2,7 +2,7 @@ ARG VERSION=latest
 
 FROM ad3m3r5/tiltedevolution:server-$VERSION-debian AS server
 
-FROM debian:12
+FROM debian:13
 
 ARG USER=container
 

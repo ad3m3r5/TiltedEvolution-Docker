@@ -12,8 +12,7 @@ FROM debian:12
 ARG USER=tilted
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN adduser --disabled-password --gecos "" $USER \
-  && apt update \
+RUN apt update \
   && apt install -y --no-install-recommends \
       build-essential \
       ca-certificates \
@@ -25,7 +24,8 @@ RUN adduser --disabled-password --gecos "" $USER \
       unzip \
       gcc-12 \
       g++-12 \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && adduser --disabled-password --gecos "" $USER
 
 USER $USER
 WORKDIR /home/$USER

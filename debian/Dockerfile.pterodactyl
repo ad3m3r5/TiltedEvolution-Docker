@@ -9,7 +9,11 @@ ARG USER=container
 ENV USER=$USER \
     HOME=/home/$USER
 
-RUN adduser --disabled-password --gecos "" $USER
+RUN apt update \
+  && apt install -y --no-install-recommends \
+      adduser \
+  && rm -rf /var/lib/apt/lists/* \
+  adduser --disabled-password --gecos "" $USER
 
 COPY --from=server --chown=container:container /home/tilted/libSTServer.so /home/server/libSTServer.so 
 COPY --from=server --chown=container:container /home/tilted/crashpad_handler /home/server/crashpad_handler

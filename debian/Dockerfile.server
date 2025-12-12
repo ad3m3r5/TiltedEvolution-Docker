@@ -22,7 +22,11 @@ ARG USER=tilted
 ENV USER=$USER \
     HOME=/home/$USER
 
-RUN adduser --disabled-password --gecos "" $USER
+RUN apt update \
+  && apt install -y --no-install-recommends \
+      adduser \
+  && rm -rf /var/lib/apt/lists/* \
+  adduser --disabled-password --gecos "" $USER
 
 COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/lib/libSTServer.so /home/$USER/libSTServer.so
 COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/bin/crashpad_handler /home/$USER/crashpad_handler

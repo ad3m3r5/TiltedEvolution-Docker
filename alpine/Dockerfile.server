@@ -15,7 +15,7 @@ RUN source ~/.xmake/profile \
 
 
 # Server Container
-FROM alpine:3.18
+FROM alpine:3.23
 
 ARG USER=tilted
 

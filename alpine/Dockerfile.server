@@ -6,11 +6,12 @@ ARG BRANCH=master
 
 SHELL ["/bin/bash", "-c"]
 
-RUN source ~/.xmake/profile \
-    && git clone --recursive -b $BRANCH $REPO ./str \
+RUN git clone --recursive -b $BRANCH $REPO ./str \
     && cd str \
+    && sed -i 's/crashpad/breakpad/g' xmake.lua
     && xmake config -m release -y \
     && xmake -y \
+    && for dir in ~/.xmake/packages/s/sentry-native/0.7.1/*/; do mkdir -p "${dir}bin"; done
     && xmake install -o package -y
 
 

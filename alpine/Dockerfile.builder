@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:3.23
 
 ARG USER=tilted
 
@@ -36,9 +36,10 @@ RUN addgroup -S $USER \
         libstdc++-dev \
         libffi-dev \
         openssl-dev \
-        libc6-compat
+        libc6-compat \
+        xmake
 
 USER $USER
 WORKDIR /home/$USER
 
-RUN curl -fsSL https://xmake.io/shget.text | bash
+#RUN curl -fsSL https://xmake.io/shget.text | bash

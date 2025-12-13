@@ -6,8 +6,7 @@ ARG BRANCH=master
 
 SHELL ["/bin/bash", "-c"]
 
-RUN source ~/.xmake/profile \
-    && git clone --recursive -b $BRANCH $REPO ./str \
+RUN git clone --recursive -b $BRANCH $REPO ./str \
     && cd str \
     && xmake config -m release -y \
     && xmake -y \

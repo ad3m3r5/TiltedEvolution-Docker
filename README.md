@@ -15,7 +15,7 @@ I am not affiliated with the Tilted Evolution or Pterodactyl development teams, 
 
 > [!WARNING]  
 > There are issues building `crashpad` in newer alpine version, hence replacing it with `inproc`.  
-> I am not sure if this will cause unforseen issues, but it seems to at least let it build.  
+> I am not sure if this will cause unforeseen issues, but it seems to at least let it build.  
 
 ## Images
 

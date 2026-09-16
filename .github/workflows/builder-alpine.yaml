@@ -44,19 +44,34 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           #   tiltedevolution-builder
           #     latest
+          #     latest-alpine
           #     {{ TAG }}
+          #     {{ TAG }}-alpine
           #   tiltedevolution
           #     builder
+          #     builder-alpine
           #     builder-latest
+          #     builder-latest-alpine
           #     builder-{{ TAG }}
+          #     builder-{{ TAG }}-alpine
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:latest
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:latest-alpine
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:${{ env.TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-builder:${{ env.TAG }}-alpine
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-alpine
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-latest
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-latest-alpine
             ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-${{ env.TAG }}
+            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:builder-${{ env.TAG }}-alpine
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:latest-alpine
             ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:${{ env.TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution-builder:${{ env.TAG }}-alpine
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-alpine
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-latest
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-latest-alpine
             ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-${{ env.TAG }}
+            ghcr.io/${{ github.repository_owner }}/tiltedevolution:builder-${{ env.TAG }}-alpine

@@ -1,13 +1,22 @@
 name: "[both-debian] Force Build and Push"
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "TiltedEvolution version to build (without the leading v), e.g. 1.8.0"
+        required: true
+        default: "1.8.0"
+      latest:
+        description: "Also tag as latest"
+        type: boolean
+        default: true
 
 env:
-  #PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
-  PLATFORMS: "linux/amd64,linux/arm64"
+  PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
+  #PLATFORMS: "linux/amd64,linux/arm64"
   #PLATFORMS: "linux/amd64"
-  TAG: "1.8.0"
-  latest: "true"
+  TAG: ${{ inputs.tag }}
+  latest: ${{ inputs.latest }}
 
 jobs:
   server-debian:

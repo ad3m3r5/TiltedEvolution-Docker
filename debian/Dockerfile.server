@@ -3,14 +3,23 @@ FROM ad3m3r5/tiltedevolution:builder-latest-debian AS builder
 
 ARG REPO=https://github.com/tiltedphoques/TiltedEvolution.git
 ARG BRANCH=master
+ARG XMAKE_JOBS=
 
 SHELL ["/bin/bash", "-c"]
 
+# patched xmake package recipes for older releases
+COPY --chown=tilted:tilted xmake-compat /home/tilted/xmake-compat
+
 RUN git clone --recursive -b $BRANCH $REPO ./str \
     && cd str \
-    && xmake config -m release -y \
-    && xmake -y \
-    && xmake install -o package -y
+    && if find . -name xmake.lua -exec grep -l "tiltedcore v0.2.7" {} + | grep -q .; then xmake repo --add tecompat /home/tilted/xmake-compat; fi \
+    && if [ -n "$XMAKE_JOBS" ]; then xmake config -m release -y --require=no --policies=compatibility.version:2.0 && xmake require -y -j "$XMAKE_JOBS"; fi \
+    && xmake config -m release -y --require=yes --policies=compatibility.version:2.0 \
+    && xmake -y ${XMAKE_JOBS:+-j "$XMAKE_JOBS"} \
+    && xmake install -o package -y \
+    && mkdir -p out \
+    && cp package/lib/libSTServer.so package/bin/SkyrimTogetherServer out/ \
+    && if [ -f package/bin/crashpad_handler ]; then cp package/bin/crashpad_handler out/; fi
 
 
 # Server Container
@@ -27,9 +36,7 @@ RUN apt update \
   && rm -rf /var/lib/apt/lists/* \
   && adduser --disabled-password --gecos "" $USER
 
-COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/lib/libSTServer.so /home/$USER/libSTServer.so
-COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/bin/crashpad_handler /home/$USER/crashpad_handler
-COPY --from=builder --chown=tilted:tilted /home/$USER/str/package/bin/SkyrimTogetherServer /home/$USER/SkyrimTogetherServer
+COPY --from=builder --chown=tilted:tilted /home/$USER/str/out/ /home/$USER/
 
 USER $USER
 WORKDIR /home/$USER

@@ -2,6 +2,11 @@ ARG VERSION=latest
 
 FROM ad3m3r5/tiltedevolution:server-$VERSION AS server
 
+USER root
+RUN mkdir -p /out \
+    && cp /home/tilted/libSTServer.so /home/tilted/SkyrimTogetherServer /out/ \
+    && if [ -f /home/tilted/crashpad_handler ]; then cp /home/tilted/crashpad_handler /out/; fi
+
 FROM alpine:3.23
 
 ARG USER=container
@@ -17,9 +22,7 @@ RUN apk upgrade --no-cache \
       libstdc++ \
     && adduser --disabled-password --home /home/$USER $USER
 
-COPY --from=server --chown=container:container /home/tilted/libSTServer.so /home/server/libSTServer.so 
-#COPY --from=server --chown=container:container /home/tilted/crashpad_handler /home/server/crashpad_handler
-COPY --from=server --chown=container:container /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
+COPY --from=server --chown=container:container /out/ /home/server/
 
 COPY --chown=container:container ./alpine/entrypoint.sh /entrypoint.sh
 

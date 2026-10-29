@@ -37,7 +37,8 @@ RUN addgroup -S $USER \
         libffi-dev \
         openssl-dev \
         libc6-compat \
-        xmake
+    && apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+        "xmake>=3.0.9"
 
 USER $USER
 WORKDIR /home/$USER

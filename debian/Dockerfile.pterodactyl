@@ -2,6 +2,11 @@ ARG VERSION=latest
 
 FROM ad3m3r5/tiltedevolution:server-$VERSION-debian AS server
 
+USER root
+RUN mkdir -p /out \
+  && cp /home/tilted/libSTServer.so /home/tilted/SkyrimTogetherServer /out/ \
+  && if [ -f /home/tilted/crashpad_handler ]; then cp /home/tilted/crashpad_handler /out/; fi
+
 FROM debian:13
 
 ARG USER=container
@@ -15,9 +20,7 @@ RUN apt update \
   && rm -rf /var/lib/apt/lists/* \
   && adduser --disabled-password --gecos "" $USER
 
-COPY --from=server --chown=container:container /home/tilted/libSTServer.so /home/server/libSTServer.so 
-COPY --from=server --chown=container:container /home/tilted/crashpad_handler /home/server/crashpad_handler
-COPY --from=server --chown=container:container /home/tilted/SkyrimTogetherServer /home/server/SkyrimTogetherServer
+COPY --from=server --chown=container:container /out/ /home/server/
 
 COPY --chown=container:container ./debian/entrypoint.sh /entrypoint.sh
 

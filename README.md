@@ -7,15 +7,18 @@ I am not affiliated with the Tilted Evolution or Pterodactyl development teams, 
 > Current Supported Platforms  
 > - alpine:  
 >   - builder: `amd64`, `arm64`, `arm/v7`, `arm/v6`  
->   - server/pterodactyl: `amd64`, `arm64`  
+>   - server/pterodactyl: `amd64`, `arm64`, `arm/v7` (`arm/v7` returned in `1.8.0`)  
 >  
 > - debian:  
 >   - builder: `amd64`, `arm64`, `arm/v7`  
->   - server/pterodactyl: `amd64`, `arm64`  
+>   - server/pterodactyl: `amd64`, `arm64`, `arm/v7` (`arm/v7` returned in `1.8.0`)  
 
 > [!WARNING]  
 > There are issues building `crashpad` in newer alpine version, hence replacing it with `inproc`.  
 > I am not sure if this will cause unforeseen issues, but it seems to at least let it build.  
+
+> [!NOTE]  
+> Builds use xmake 3 with workarounds for newer dependencies and qemu (arm) builds, so rebuild both builder images before building server images `>= 1.8.0`.
 
 ## Images
 

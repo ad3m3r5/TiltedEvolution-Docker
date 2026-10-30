@@ -11,138 +11,15 @@ on:
         type: boolean
         default: true
 
-env:
-  PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
-  #PLATFORMS: "linux/amd64,linux/arm64"
-  #PLATFORMS: "linux/amd64"
-  TAG: ${{ inputs.tag }}
-  latest: ${{ inputs.latest }}
-
 jobs:
-  server-alpine:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      # Build without latest
-      - name: Build and push - server [alpine]
-        if: ${{ env.latest == 'false' }}
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          file: alpine/Dockerfile.server
-          platforms: ${{ env.PLATFORMS }}
-          #   tiltedevolution-server
-          #     {{ TAG }}
-          #   tiltedevolution
-          #     server
-          #     server-{{ TAG }}
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.TAG }}
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-${{ env.TAG }}
-          build-args: |
-            BRANCH=v${{ env.TAG }}
-
-      - name: Build and push - pterodactyl [alpine]
-        if: ${{ env.latest == 'false' }}
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          file: alpine/Dockerfile.pterodactyl
-          platforms: ${{ env.PLATFORMS }}
-          #   tiltedevolution-pterodactyl
-          #     {{ TAG }}
-          #   tiltedevolution
-          #     pterodactyl
-          #     pterodactyl-{{ TAG }}
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.TAG }}
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.TAG }}
-          build-args: |
-            VERSION=${{ env.TAG }}
-
-      # Build with latest
-      - name: Build and push - server [alpine]
-        if: ${{ env.latest == 'true' }}
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          file: alpine/Dockerfile.server
-          platforms: ${{ env.PLATFORMS }}
-          #   tiltedevolution-server
-          #     latest
-          #     {{ TAG }}
-          #   tiltedevolution
-          #     server
-          #     server-latest
-          #     server-{{ TAG }}
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-server:${{ env.TAG }}
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:server-${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-server:${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:server-${{ env.TAG }}
-          build-args: |
-            BRANCH=v${{ env.TAG }}
-
-      - name: Build and push - pterodactyl [alpine]
-        if: ${{ env.latest == 'true' }}
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          file: alpine/Dockerfile.pterodactyl
-          platforms: ${{ env.PLATFORMS }}
-          #   tiltedevolution-pterodactyl
-          #     latest
-          #     {{ TAG }}
-          #   tiltedevolution
-          #     pterodactyl
-          #     pterodactyl-latest
-          #     pterodactyl-{{ TAG }}
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution-pterodactyl:${{ env.TAG }}
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-latest
-            ${{ vars.DOCKERHUB_USERNAME }}/tiltedevolution:pterodactyl-${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution-pterodactyl:${{ env.TAG }}
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-latest
-            ghcr.io/${{ github.repository_owner }}/tiltedevolution:pterodactyl-${{ env.TAG }}
-          build-args: |
-            VERSION=${{ env.TAG }}
+  both-alpine:
+    uses: ./.github/workflows/build-server.yaml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      os: alpine
+      tag: ${{ inputs.tag }}
+      latest: ${{ inputs.latest }}
+      pterodactyl: true
+    secrets: inherit

@@ -1,0 +1,204 @@
+name: "[reusable] Build and Push server (+ pterodactyl)"
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: "debian or alpine"
+        type: string
+        required: true
+      tag:
+        description: "TiltedEvolution version to build (without the leading v)"
+        type: string
+        required: true
+      latest:
+        description: "Also tag as latest"
+        type: boolean
+        default: true
+      pterodactyl:
+        description: "Also build the pterodactyl image"
+        type: boolean
+        default: true
+
+env:
+  TAG: ${{ inputs.tag }}
+  LATEST: ${{ inputs.latest }}
+  # debian tags are suffixed with -debian, alpine tags are not
+  SUFFIX: ${{ inputs.os == 'debian' && '-debian' || '' }}
+  DOCKERHUB: ${{ vars.DOCKERHUB_USERNAME }}
+  GHCR: ghcr.io/${{ github.repository_owner }}
+
+jobs:
+  # each platform builds in its own job (6h limit per job), arm64 natively, arm/v7 under qemu
+  server:
+    name: server-${{ inputs.os }} (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+          - platform: linux/arm/v7
+            runner: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+      - name: Set up QEMU
+        if: ${{ matrix.platform == 'linux/arm/v7' }}
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # push untagged (by digest), the merge job creates the tags
+      - name: Build and push by digest - server [${{ inputs.os }}]
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          file: ${{ inputs.os }}/Dockerfile.server
+          platforms: ${{ matrix.platform }}
+          build-args: |
+            BRANCH=v${{ env.TAG }}
+          outputs: type=image,"name=${{ env.DOCKERHUB }}/tiltedevolution-server,${{ env.GHCR }}/tiltedevolution-server",push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ inputs.os }}-${{ env.PLATFORM_PAIR }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  # combine the per-platform digests into the multi-arch tags
+  #   tiltedevolution-server
+  #     {{ TAG }}{{ SUFFIX }}, latest{{ SUFFIX }}
+  #   tiltedevolution
+  #     server{{ SUFFIX }}, server-{{ TAG }}{{ SUFFIX }}, server-latest{{ SUFFIX }}
+  merge:
+    needs: server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-${{ inputs.os }}-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create manifest lists and push - server [${{ inputs.os }}]
+        working-directory: /tmp/digests
+        run: |
+          for ns in "$DOCKERHUB" "$GHCR"; do
+            tags="-t $ns/tiltedevolution-server:${TAG}${SUFFIX} -t $ns/tiltedevolution:server${SUFFIX} -t $ns/tiltedevolution:server-${TAG}${SUFFIX}"
+            if [ "$LATEST" = "true" ]; then
+              tags="$tags -t $ns/tiltedevolution-server:latest${SUFFIX} -t $ns/tiltedevolution:server-latest${SUFFIX}"
+            fi
+            docker buildx imagetools create $tags $(printf "$ns/tiltedevolution-server@sha256:%s " *)
+            docker buildx imagetools inspect $ns/tiltedevolution-server:${TAG}${SUFFIX}
+          done
+
+  # only copies the server files, so a single multi-platform job is fine
+  #   tiltedevolution-pterodactyl
+  #     {{ TAG }}{{ SUFFIX }}, latest{{ SUFFIX }}
+  #   tiltedevolution
+  #     pterodactyl{{ SUFFIX }}, pterodactyl-{{ TAG }}{{ SUFFIX }}, pterodactyl-latest{{ SUFFIX }}
+  pterodactyl:
+    needs: merge
+    if: ${{ inputs.pterodactyl }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tags
+        id: tags
+        run: |
+          {
+            echo "tags<<EOF"
+            for ns in "$DOCKERHUB" "$GHCR"; do
+              echo "$ns/tiltedevolution-pterodactyl:${TAG}${SUFFIX}"
+              echo "$ns/tiltedevolution:pterodactyl${SUFFIX}"
+              echo "$ns/tiltedevolution:pterodactyl-${TAG}${SUFFIX}"
+              if [ "$LATEST" = "true" ]; then
+                echo "$ns/tiltedevolution-pterodactyl:latest${SUFFIX}"
+                echo "$ns/tiltedevolution:pterodactyl-latest${SUFFIX}"
+              fi
+            done
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build and push - pterodactyl [${{ inputs.os }}]
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: ${{ inputs.os }}/Dockerfile.pterodactyl
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          tags: ${{ steps.tags.outputs.tags }}
+          build-args: |
+            VERSION=${{ env.TAG }}

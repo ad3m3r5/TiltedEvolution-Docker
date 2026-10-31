@@ -22,8 +22,8 @@ on:
 env:
   TAG: ${{ inputs.tag }}
   LATEST: ${{ inputs.latest }}
-  # debian tags are suffixed with -debian, alpine tags are not
-  SUFFIX: ${{ inputs.os == 'debian' && '-debian' || '' }}
+  # comma separated tag suffixes, debian: -debian, alpine: none (default) and -alpine
+  SUFFIXES: ${{ inputs.os == 'debian' && '-debian' || ',-alpine' }}
   DOCKERHUB: ${{ vars.DOCKERHUB_USERNAME }}
   GHCR: ghcr.io/${{ github.repository_owner }}
 
@@ -98,7 +98,7 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  # combine the per-platform digests into the multi-arch tags
+  # combine the per-platform digests into the multi-arch tags, once per SUFFIX
   #   tiltedevolution-server
   #     {{ TAG }}{{ SUFFIX }}, latest{{ SUFFIX }}
   #   tiltedevolution
@@ -134,16 +134,20 @@ jobs:
       - name: Create manifest lists and push - server [${{ inputs.os }}]
         working-directory: /tmp/digests
         run: |
+          IFS=, read -ra suffixes <<< "$SUFFIXES"
           for ns in "$DOCKERHUB" "$GHCR"; do
-            tags="-t $ns/tiltedevolution-server:${TAG}${SUFFIX} -t $ns/tiltedevolution:server${SUFFIX} -t $ns/tiltedevolution:server-${TAG}${SUFFIX}"
-            if [ "$LATEST" = "true" ]; then
-              tags="$tags -t $ns/tiltedevolution-server:latest${SUFFIX} -t $ns/tiltedevolution:server-latest${SUFFIX}"
-            fi
+            tags=""
+            for sfx in "${suffixes[@]}"; do
+              tags="$tags -t $ns/tiltedevolution-server:${TAG}${sfx} -t $ns/tiltedevolution:server${sfx} -t $ns/tiltedevolution:server-${TAG}${sfx}"
+              if [ "$LATEST" = "true" ]; then
+                tags="$tags -t $ns/tiltedevolution-server:latest${sfx} -t $ns/tiltedevolution:server-latest${sfx}"
+              fi
+            done
             docker buildx imagetools create $tags $(printf "$ns/tiltedevolution-server@sha256:%s " *)
-            docker buildx imagetools inspect $ns/tiltedevolution-server:${TAG}${SUFFIX}
+            docker buildx imagetools inspect $ns/tiltedevolution-server:${TAG}${suffixes[0]}
           done
 
-  # only copies the server files, so a single multi-platform job is fine
+  # only copies the server files, so a single multi-platform job is fine, tagged once per SUFFIX
   #   tiltedevolution-pterodactyl
   #     {{ TAG }}{{ SUFFIX }}, latest{{ SUFFIX }}
   #   tiltedevolution
@@ -181,14 +185,17 @@ jobs:
         run: |
           {
             echo "tags<<EOF"
+            IFS=, read -ra suffixes <<< "$SUFFIXES"
             for ns in "$DOCKERHUB" "$GHCR"; do
-              echo "$ns/tiltedevolution-pterodactyl:${TAG}${SUFFIX}"
-              echo "$ns/tiltedevolution:pterodactyl${SUFFIX}"
-              echo "$ns/tiltedevolution:pterodactyl-${TAG}${SUFFIX}"
-              if [ "$LATEST" = "true" ]; then
-                echo "$ns/tiltedevolution-pterodactyl:latest${SUFFIX}"
-                echo "$ns/tiltedevolution:pterodactyl-latest${SUFFIX}"
-              fi
+              for sfx in "${suffixes[@]}"; do
+                echo "$ns/tiltedevolution-pterodactyl:${TAG}${sfx}"
+                echo "$ns/tiltedevolution:pterodactyl${sfx}"
+                echo "$ns/tiltedevolution:pterodactyl-${TAG}${sfx}"
+                if [ "$LATEST" = "true" ]; then
+                  echo "$ns/tiltedevolution-pterodactyl:latest${sfx}"
+                  echo "$ns/tiltedevolution:pterodactyl-latest${sfx}"
+                fi
+              done
             done
             echo "EOF"
           } >> "$GITHUB_OUTPUT"

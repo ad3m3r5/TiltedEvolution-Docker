@@ -1,20 +1,20 @@
 # TiltedEvolution-Docker
 This repository contains custom Docker images for the [Tilted Evolution](https://github.com/tiltedphoques/TiltedEvolution) / [Skyrim Together Reborn](https://skyrim-together.com/) project using a base of Alpine and Debian. There is also a Docker image and Pterodactyl egg for easily running the game server using [Pterodactyl](https://pterodactyl.io/).
 
-I am not affiliated with the Tilted Evolution or Pterodactyl development teams, projects, or any other related teams or pojects.
+I am not affiliated with the Tilted Evolution or Pterodactyl development teams, projects, or any other related teams or projects.
 
 > [!IMPORTANT]  
 > Current Supported Platforms  
 > - alpine:  
 >   - builder: `amd64`, `arm64`, `arm/v7`, `arm/v6`  
->   - server/pterodactyl: `amd64`, `arm64`, `arm/v7` (`arm/v7` returned in `1.8.0`)  
+>   - server/pterodactyl: `amd64`, `arm64`, `arm/v7` (`arm/v7` added in `1.8.0`)  
 >  
 > - debian:  
 >   - builder: `amd64`, `arm64`, `arm/v7`  
->   - server/pterodactyl: `amd64`, `arm64`, `arm/v7` (`arm/v7` returned in `1.8.0`)  
+>   - server/pterodactyl: `amd64`, `arm64`, `arm/v7` (`arm/v7` added in `1.8.0`)  
 
 > [!WARNING]  
-> There are issues building `crashpad` in newer alpine version, hence replacing it with `inproc`.  
+> There are issues building `crashpad` in newer alpine versions, hence replacing it with `inproc` (`<= 1.8.0` only).  
 > I am not sure if this will cause unforeseen issues, but it seems to at least let it build.  
 
 > [!NOTE]  
@@ -24,12 +24,14 @@ I am not affiliated with the Tilted Evolution or Pterodactyl development teams, 
 
 Images starting with `1.6.8` should be available on Docker Hub and ghcr.io. They should also have the "newer" versioning under a uniform name of `tiltedevolution`.  
 
+Tags are multi-arch. Alpine tags have no suffix, newer builds also have `-alpine` aliases.
+
 - Alpine
   - tiltedevolution
     - Tags:
-      - `builder-latest`, `builder-<version-of-builder>`
-      - `server-latest`, `server-<version-of-builder>`
-      - `pterodactyl-latest`, `pterodactyl-<version-of-builder>`
+      - `builder`, `builder-latest`, `builder-<version-of-builder>`
+      - `server`, `server-latest`, `server-<version-of-tilted>`
+      - `pterodactyl`, `pterodactyl-latest`, `pterodactyl-<version-of-tilted>`
   - tiltedevolution-builder
     - Tags: `latest`, `<version-of-builder>`
   - tiltedevolution-server
@@ -42,9 +44,9 @@ Images starting with `1.6.8` should be available on Docker Hub and ghcr.io. They
 - Debian
   - tiltedevolution
     - Tags:
-      - `builder-latest-debian`, `builder-<version-of-builder>-debian`
-      - `server-latest-debian`, `server-<version-of-builder>-debian`
-      - `pterodactyl-latest-debian`, `pterodactyl-<version-of-builder>-debian`
+      - `builder-debian`, `builder-latest-debian`, `builder-<version-of-builder>-debian`
+      - `server-debian`, `server-latest-debian`, `server-<version-of-tilted>-debian`
+      - `pterodactyl-debian`, `pterodactyl-latest-debian`, `pterodactyl-<version-of-tilted>-debian`
   - tiltedevolution-builder
     - Tags: `latest-debian`, `<version-of-builder>-debian`
   - tiltedevolution-server
@@ -59,13 +61,13 @@ Images starting with `1.6.8` should be available on Docker Hub and ghcr.io. They
 - [![Docker Hub](https://img.shields.io/badge/DockerHub-pterodactyl-blue?logo=docker&style=plastic)](https://hub.docker.com/r/ad3m3r5/tiltedevolution) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ad3m3r5/tiltedevolution/pterodactyl-latest?logo=docker&style=plastic)
 
 ## Building
-  - `docker build -t tiltedevolution:builder -f Dockerfile.builder .`
-  - `docker build -t tiltedevolution:server -f Dockerfile.server .`
+  - `docker build -t tiltedevolution:builder -f alpine/Dockerfile.builder .`
+  - `docker build -t tiltedevolution:server -f alpine/Dockerfile.server .`
     - Dockerfile will default to the `master` branch. Specific tag versions can be used instead.
-    - example: `docker build -t tiltedevolution:server-1.6.8 --build-arg BRANCH=v1.6.8 -f Dockerfile .`
-  - `docker build -t tiltedevolution:pterodactyl -f Dockerfile.pterodactyl .`
+    - example: `docker build -t tiltedevolution:server-1.8.0 --build-arg BRANCH=v1.8.0 -f alpine/Dockerfile.server .`
+  - `docker build -t tiltedevolution:pterodactyl -f alpine/Dockerfile.pterodactyl .`
     - Dockerfile will default to `latest` tag of the `tiltedevolution` base image. Specific tag versions can be used instead.
-    - example: `docker build -t tiltedevolution:pterodactyl-1.3.2 --build-arg VERSION=1.3.2 -f Dockerfile.pterodactyl .`
+    - example: `docker build -t tiltedevolution:pterodactyl-1.8.0 --build-arg VERSION=1.8.0 -f alpine/Dockerfile.pterodactyl .`
 
 
 ## Running
@@ -99,7 +101,7 @@ This is for running a managed and containerized game server using [Pterodactyl](
       - You can choose a different name, like `Skyrim Together`
     - **Save**
   - admin > Nests > **Import Egg**
-    - Egg File: `egg-tilted-evolution.json`
+    - Egg File: the egg `.json` file downloaded above
     - Associated Nest: `Tilted Evolution`
       - Or whichever name you chose above
     - **Import**

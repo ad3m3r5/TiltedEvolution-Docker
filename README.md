@@ -71,9 +71,10 @@ Tags are multi-arch. Alpine tags have no suffix, newer builds also have `-alpine
 
 
 ## Running
-The original [wiki](https://wiki.tiltedphoques.com/tilted-online/guides/server-guide/linux-setup/docker-setup) information should still be used, but with the new image.  
+The [wiki](https://wiki.tiltedphoques.com/tilted-online/guides/server-guide/linux-setup/docker-setup) still applies, but these images use `/home/tilted/` instead of `/st-server/` for the volume paths.  
 
 Newer versions of this image do not run as root, so you will have to set the directory permissions as shown below.  
+By default the images run as `1000:1000`, except older Alpine images (`<= 1.8.2`) which run as `100:101`, so use `chown -R 100:101` for those.  
 
 Example:
 ```

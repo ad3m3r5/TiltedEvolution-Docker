@@ -36,8 +36,8 @@ ENV USER=$USER \
 
 RUN apk upgrade --no-cache \
     && apk add libstdc++ \
-    && addgroup -S $USER \
-    && adduser -S $USER -G $USER
+    && addgroup -S -g 1000 $USER \
+    && adduser -S -u 1000 $USER -G $USER
 
 COPY --from=builder --chown=tilted:tilted /home/$USER/str/out/ /home/$USER/
 

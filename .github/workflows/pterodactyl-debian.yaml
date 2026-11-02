@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "TiltedEvolution version to build (without the leading v), e.g. 1.8.3"
+        description: "TiltedEvolution version to build (without the leading v), e.g. 1.8.4"
         required: true
-        default: "1.8.3"
+        default: "1.8.4"
 
 env:
   PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"

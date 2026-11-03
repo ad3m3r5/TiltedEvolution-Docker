@@ -28,7 +28,7 @@ env:
   GHCR: ghcr.io/${{ github.repository_owner }}
 
 jobs:
-  # each platform builds in its own job (6h limit per job), arm64 natively, arm/v7 under qemu
+  # each platform builds in its own job (6h limit per job), arm64 natively, arm/v7 under qemu on the arm64 runner
   server:
     name: server-${{ inputs.os }} (${{ matrix.platform }})
     strategy:
@@ -40,7 +40,7 @@ jobs:
           - platform: linux/arm64
             runner: ubuntu-24.04-arm
           - platform: linux/arm/v7
-            runner: ubuntu-latest
+            runner: ubuntu-24.04-arm
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 360
 
@@ -74,8 +74,33 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # push untagged (by digest), the merge job creates the tags
-      - name: Build and push by digest - server [${{ inputs.os }}]
-        id: build
+      # up to 3 attempts, git can fail intermittently under qemu (arm/v7)
+      - name: Build and push by digest - server [${{ inputs.os }}] (attempt 1)
+        id: build1
+        continue-on-error: true
+        uses: docker/build-push-action@v6
+        with:
+          file: ${{ inputs.os }}/Dockerfile.server
+          platforms: ${{ matrix.platform }}
+          build-args: |
+            BRANCH=v${{ env.TAG }}
+          outputs: type=image,"name=${{ env.DOCKERHUB }}/tiltedevolution-server,${{ env.GHCR }}/tiltedevolution-server",push-by-digest=true,name-canonical=true,push=true
+
+      - name: Build and push by digest - server [${{ inputs.os }}] (attempt 2)
+        id: build2
+        if: ${{ steps.build1.outcome == 'failure' }}
+        continue-on-error: true
+        uses: docker/build-push-action@v6
+        with:
+          file: ${{ inputs.os }}/Dockerfile.server
+          platforms: ${{ matrix.platform }}
+          build-args: |
+            BRANCH=v${{ env.TAG }}
+          outputs: type=image,"name=${{ env.DOCKERHUB }}/tiltedevolution-server,${{ env.GHCR }}/tiltedevolution-server",push-by-digest=true,name-canonical=true,push=true
+
+      - name: Build and push by digest - server [${{ inputs.os }}] (attempt 3)
+        id: build3
+        if: ${{ steps.build2.outcome == 'failure' }}
         uses: docker/build-push-action@v6
         with:
           file: ${{ inputs.os }}/Dockerfile.server
@@ -87,7 +112,7 @@ jobs:
       - name: Export digest
         run: |
           mkdir -p /tmp/digests
-          digest="${{ steps.build.outputs.digest }}"
+          digest="${{ steps.build1.outputs.digest || steps.build2.outputs.digest || steps.build3.outputs.digest }}"
           touch "/tmp/digests/${digest#sha256:}"
 
       - name: Upload digest

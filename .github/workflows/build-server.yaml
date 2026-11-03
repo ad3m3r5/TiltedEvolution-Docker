@@ -28,7 +28,7 @@ env:
   GHCR: ghcr.io/${{ github.repository_owner }}
 
 jobs:
-  # each platform builds in its own job (6h limit per job), arm64 natively, arm/v7 under qemu on the arm64 runner
+  # each platform builds in its own job (6h limit per job), arm64 natively, arm/v7 under qemu
   server:
     name: server-${{ inputs.os }} (${{ matrix.platform }})
     strategy:
@@ -40,7 +40,7 @@ jobs:
           - platform: linux/arm64
             runner: ubuntu-24.04-arm
           - platform: linux/arm/v7
-            runner: ubuntu-24.04-arm
+            runner: ubuntu-latest
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 360
 
